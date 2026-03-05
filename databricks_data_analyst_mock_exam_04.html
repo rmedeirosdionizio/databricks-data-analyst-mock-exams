@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Databricks Data Analyst Associate - Hard Mock Exam (45Q) - Unique</title>
+<style>
+  :root { --bg:#f5f7fa; --card:#fff; --ink:#111827; --muted:#6b7280; --accent:#2563eb;
+    --ok:#16a34a; --bad:#dc2626; --warn:#f59e0b; --shadow:0 2px 10px rgba(0,0,0,.08); --r:14px; }
+  body { margin:0; font-family: Arial, sans-serif; background:var(--bg); color:var(--ink);}
+  header { background:#111827; color:#fff; padding:16px 18px; position:sticky; top:0; z-index:10; }
+  header .row { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:18px; }
+  .pill { background:rgba(255,255,255,.12); padding:8px 10px; border-radius:999px; font-weight:800; }
+  .container { max-width:1150px; margin:18px auto; padding:0 14px; }
+  .grid { display:grid; grid-template-columns: 1fr 320px; gap:14px; }
+  @media (max-width: 980px) { .grid { grid-template-columns:1fr; } }
+  .card { background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:16px; }
+  .meta { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+  .tag { font-size:12px; color:var(--muted); background:#f3f4f6; padding:6px 10px; border-radius:999px; }
+  .objective { font-weight:800; }
+  .scenario { line-height:1.45; }
+  .question { margin-top:10px; font-size:16px; font-weight:800; }
+  .options label { display:block; padding:10px 10px; border:1px solid #e5e7eb; border-radius:12px; margin:8px 0; cursor:pointer; }
+  .options input { margin-right:10px; }
+  .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button { border:0; padding:10px 12px; border-radius:12px; cursor:pointer; font-weight:800; }
+  .btn { background:#e5e7eb; color:#111827; }
+  .btn.primary { background:var(--accent); color:#fff; }
+  .btn.warn { background:var(--warn); color:#111827; }
+  .btn.ghost { background:transparent; border:1px solid #e5e7eb; }
+  .nav { display:grid; grid-template-columns: repeat(9, 1fr); gap:6px; }
+  .nav button { padding:8px 0; font-size:12px; background:#f3f4f6; }
+  .nav button.current { outline:2px solid var(--accent); }
+  .nav button.answered { background:#dcfce7; }
+  .nav button.flagged { background:#fef3c7; }
+  .feedback { margin-top:12px; padding:12px; border-radius:12px; background:#eef2ff; display:none; }
+  .feedback.ok { background:#ecfdf5; }
+  .feedback.bad { background:#fef2f2; }
+  .muted { color:var(--muted); font-size:12px; }
+  .bar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+  .bar > div { height:100%; width:0%; background:var(--accent); }
+  .error-banner { display:none; background:var(--bad); color:white; padding:10px 14px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="row">
+    <h1>Hard Mock Exam — 45 Unique Questions</h1>
+    <div class="pill" id="timer">90:00</div>
+  </div>
+</header>
+<div class="error-banner" id="errorBanner">Script failed to initialize. Please re-download the file and refresh.</div>
+
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <div class="meta">
+        <div class="tag" id="qCount">Question 1 / 45</div>
+        <div class="tag" id="domainTag">Domain</div>
+        <div class="tag objective" id="objectiveTag">Objective</div>
+      </div>
+
+      <div class="scenario" id="scenario"></div>
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+
+      <div class="controls">
+        <button class="btn" id="prevBtn">Previous</button>
+        <button class="btn" id="nextBtn">Next</button>
+        <button class="btn warn" id="flagBtn">Flag</button>
+        <button class="btn primary" id="reviewBtn">Review Answer</button>
+        <button class="btn ghost" id="clearBtn">Clear</button>
+        <button class="btn" id="submitBtn">Submit</button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="card" id="results" style="display:none; margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;">Results</h3>
+        <div id="scoreLine" style="font-weight:900;"></div>
+        <div class="muted" style="margin-top:8px;">Domain breakdown</div>
+        <div id="breakdown"></div>
+      </div>
+
+      <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center;">
+        <div class="muted">Autosaves locally in your browser.</div>
+        <div class="muted" id="flagHint"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="font-weight:900;">Navigate</div>
+        <button class="btn ghost" id="resetBtn">Reset</button>
+      </div>
+      <div class="muted" style="margin:8px 0 10px 0;">Green = answered • Yellow = flagged</div>
+      <div class="nav" id="nav"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+try {
+  const STORAGE_KEY = "dbx_daa_hard_unique_45q_v1";
+  const QUESTIONS = [{"domain": "Understanding of Databricks Data Intelligence Platform", "objective": "Platform Fundamentals", "scenario": "Your org is adopting the Databricks Data Intelligence Platform to unify data engineering, analytics, and governance in one environment.", "question": "Which statement BEST describes why Unity Catalog is central to this platform approach?", "options": ["A. It replaces Delta Lake as the storage layer", "B. It provides a centralized governance model for data and AI assets across workspaces", "C. It is a notebook-only feature for versioning code", "D. It is required only for streaming workloads"], "correct": "B", "explanation": "Unity Catalog centralizes permissions, lineage, and governance for data and AI assets across workspaces."}, {"domain": "Understanding of Databricks Data Intelligence Platform", "objective": "Compute & Workloads", "scenario": "A team runs ad\u2011hoc exploration in notebooks and production SQL dashboards for executives.", "question": "Which pairing is MOST appropriate for these workloads?", "options": ["A. Notebooks on SQL Warehouses; Dashboards on all-purpose clusters", "B. Both on a single all-purpose cluster for simplicity", "C. Notebooks on all-purpose clusters; Dashboards on SQL Warehouses", "D. Both must run on serverless notebooks only"], "correct": "C", "explanation": "All-purpose clusters fit interactive notebooks; SQL Warehouses are purpose-built for SQL endpoints and dashboards."}, {"domain": "Understanding of Databricks Data Intelligence Platform", "objective": "Lakehouse Concepts", "scenario": "A stakeholder asks why Delta tables are preferred over plain Parquet in Databricks analytics.", "question": "Which benefit is MOST directly tied to Delta Lake?", "options": ["A. Automatic translation of SQL to Python", "B. ACID transactions and reliable schema enforcement/evolution", "C. Guaranteed faster queries than any other format", "D. Built-in dashboard theming"], "correct": "B", "explanation": "Delta adds transactional guarantees and schema management on top of file storage."}, {"domain": "Understanding of Databricks Data Intelligence Platform", "objective": "Metadata & Discovery", "scenario": "Analysts complain they can\u2019t find trusted datasets and keep re-creating similar tables.", "question": "Which feature MOST directly helps discover and trust datasets?", "options": ["A. Disabling result caching", "B. Data Explorer with table descriptions/tags and lineage", "C. Running VACUUM more frequently", "D. Using only temporary views"], "correct": "B", "explanation": "Discovery is improved by metadata, documentation, and lineage visibility in the catalog/data explorer."}, {"domain": "Understanding of Databricks Data Intelligence Platform", "objective": "Environments", "scenario": "You need separate dev and prod environments with consistent governance rules across both.", "question": "What is the BEST practice?", "options": ["A. Use one workspace and name schemas dev/prod", "B. Use separate workspaces with Unity Catalog-managed catalogs/schemas and consistent grants", "C. Duplicate data manually between users\u2019 DBFS folders", "D. Avoid Unity Catalog to keep environments flexible"], "correct": "B", "explanation": "Separate workspaces with UC-managed governance keeps boundaries clear while maintaining consistent policy management."}, {"domain": "Managing Data", "objective": "Delta Table Maintenance", "scenario": "A Delta table receives many small daily writes and query latency is increasing over time.", "question": "Which action MOST directly reduces small-file overhead for future reads?", "options": ["A. DROP TABLE and recreate it", "B. OPTIMIZE the table (optionally with ZORDER)", "C. Increase dashboard refresh frequency", "D. Disable statistics collection"], "correct": "B", "explanation": "OPTIMIZE compacts small files; ZORDER can further improve data skipping for common predicates."}, {"domain": "Managing Data", "objective": "Versioning & Recovery", "scenario": "A user accidentally overwrote a Delta table with incorrect data an hour ago.", "question": "What is the FASTEST way to restore correct data?", "options": ["A. Run VACUUM immediately", "B. Use Delta Time Travel to query/restore a previous version", "C. Rebuild the table from scratch without history", "D. Delete the warehouse cache"], "correct": "B", "explanation": "Time Travel enables accessing prior versions for recovery (until vacuum retention removes files)."}, {"domain": "Managing Data", "objective": "Performance Metadata", "scenario": "You want the optimizer to choose better join strategies by having accurate table statistics.", "question": "Which command is MOST relevant?", "options": ["A. ANALYZE TABLE COMPUTE STATISTICS", "B. SHOW GRANTS", "C. DESCRIBE HISTORY", "D. REFRESH TABLE"], "correct": "A", "explanation": "Computing statistics helps the optimizer estimate cardinalities and costs."}, {"domain": "Managing Data", "objective": "Lifecycle", "scenario": "Storage costs are rising; you need to remove old unneeded files safely from a Delta table after ensuring rollback is not required beyond 14 days.", "question": "Which combination is MOST appropriate?", "options": ["A. VACUUM with a retention period aligned to policy", "B. OPTIMIZE with ZORDER", "C. CREATE OR REPLACE VIEW", "D. CACHE TABLE"], "correct": "A", "explanation": "VACUUM removes old files; retention should follow data recovery and compliance requirements."}, {"domain": "Importing Data", "objective": "Incremental Ingestion", "scenario": "New JSON files land hourly in cloud object storage. You want idempotent incremental loading into a Delta table using SQL.", "question": "Which option is BEST?", "options": ["A. COPY INTO with file tracking into a Delta table", "B. INSERT INTO from a manual file upload each hour", "C. CREATE TABLE AS SELECT reading only the latest folder, overwriting each run", "D. Export the JSON to CSV first"], "correct": "A", "explanation": "COPY INTO can track previously loaded files and supports incremental ingestion patterns."}, {"domain": "Importing Data", "objective": "Schema Handling", "scenario": "A CSV feed sometimes adds new optional columns. You need ingestion to continue while capturing the new columns.", "question": "Which approach is MOST appropriate?", "options": ["A. Disable schema enforcement permanently", "B. Use schema evolution on Delta during ingest (when supported)", "C. Force all columns to STRING forever", "D. Reject all new files automatically"], "correct": "B", "explanation": "Schema evolution allows adding compatible columns while maintaining governance and reliability."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Warehouse Selection", "scenario": "Executives access dashboards mostly during business hours and demand fast query start times.", "question": "Which setup BEST fits?", "options": ["A. Large all-purpose cluster kept running 24/7", "B. SQL Warehouse with auto-stop and an appropriate size for peak hours", "C. Single-node cluster without scaling", "D. Notebook cluster with job scheduling only"], "correct": "B", "explanation": "SQL Warehouses are designed for SQL/dashboard workloads; auto-stop reduces off-hours cost."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "CTE Usage", "scenario": "You need to reuse an intermediate result multiple times inside one query for readability.", "question": "Which SQL feature is MOST appropriate?", "options": ["A. A Common Table Expression (WITH clause)", "B. VACUUM", "C. A dashboard parameter", "D. A Unity Catalog grant"], "correct": "A", "explanation": "CTEs improve readability and can structure complex SQL logic."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Window Functions", "scenario": "You need each customer\u2019s most recent purchase per customer_id.", "question": "Which pattern is BEST?", "options": ["A. GROUP BY customer_id and MAX(purchase_time), selecting non-aggregated columns directly", "B. ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY purchase_time DESC) then filter rn=1", "C. CROSS JOIN then filter later", "D. Use VACUUM to remove older rows"], "correct": "B", "explanation": "Window functions allow selecting the full row associated with the latest timestamp per customer."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Semi-structured", "scenario": "A column payload contains JSON and you need to extract field 'device.os' in Databricks SQL.", "question": "Which function is MOST appropriate?", "options": ["A. date_add", "B. get_json_object(payload, '$.device.os')", "C. sha2(payload)", "D. coalesce(payload)"], "correct": "B", "explanation": "get_json_object extracts JSON fields using JSONPath in Databricks SQL."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Join Correctness", "scenario": "Your fact table has duplicate keys; joining to a dimension is inflating counts in a dashboard.", "question": "Which approach BEST prevents double counting?", "options": ["A. Switch INNER JOIN to CROSS JOIN", "B. Aggregate to the correct grain before joining, or de-duplicate keys appropriately", "C. Add DISTINCT to every selected column", "D. Disable result caching"], "correct": "B", "explanation": "Correctness comes from modeling at the right grain; de-duplication/aggregation avoids multiplicative joins."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Parameterized Dashboards", "scenario": "You want a SQL query to respond to a dashboard dropdown for region.", "question": "What is the BEST practice?", "options": ["A. Hardcode every region in separate queries", "B. Use a query parameter and reference it in the WHERE clause", "C. Use VACUUM before each query", "D. Use only temporary views"], "correct": "B", "explanation": "Parameters allow dynamic filtering without duplicating queries."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Temporary vs Permanent", "scenario": "You need a quick, session-scoped dataset for a single exploration without persisting metadata.", "question": "Which object is MOST appropriate?", "options": ["A. TEMP VIEW", "B. MANAGED TABLE", "C. MATERIALIZED VIEW (always)", "D. CATALOG"], "correct": "A", "explanation": "Temporary views exist only for the session and avoid persisting objects."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Upserts", "scenario": "You receive CDC updates and need to apply inserts/updates into a Delta table using SQL.", "question": "Which statement is MOST appropriate?", "options": ["A. MERGE INTO target USING source", "B. VACUUM target", "C. DESCRIBE HISTORY target", "D. CACHE TABLE target"], "correct": "A", "explanation": "MERGE supports UPSERT semantics into Delta tables."}, {"domain": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Warehouses & Concurrency", "scenario": "Multiple analysts run heavy queries simultaneously and experience queueing.", "question": "Which action MOST directly improves concurrency?", "options": ["A. Increase the SQL Warehouse size or use scaling (if available)", "B. Disable Photon", "C. Remove all ORDER BY clauses", "D. Convert Delta to Parquet"], "correct": "A", "explanation": "Increasing warehouse capacity/scaling improves throughput and reduces queueing under concurrency."}, {"domain": "Analysing Queries", "objective": "Query Profile Interpretation", "scenario": "A query profile shows high time spent in 'Shuffle' and large exchanged data.", "question": "Which change is MOST likely to reduce shuffle?", "options": ["A. Broadcast a small dimension table in the join", "B. Add more SELECT columns", "C. Replace INNER JOIN with CROSS JOIN", "D. Increase dashboard refresh"], "correct": "A", "explanation": "Broadcast joins can avoid large shuffles when one side is small."}, {"domain": "Analysing Queries", "objective": "Predicate Pushdown", "scenario": "A query filters on a partition column but still scans many files.", "question": "Which is the MOST likely cause?", "options": ["A. The filter is applied after an expensive join and cannot prune early", "B. The query uses COUNT(*)", "C. The warehouse has Photon enabled", "D. The table is a view"], "correct": "A", "explanation": "Filter placement can prevent pruning; pushing predicates earlier helps reduce scanned data."}, {"domain": "Analysing Queries", "objective": "Data Skipping", "scenario": "You frequently filter by event_date and customer_id but see high file scan counts.", "question": "What is the BEST improvement?", "options": ["A. OPTIMIZE with ZORDER on (event_date, customer_id)", "B. VACUUM with zero retention", "C. Use SELECT * always", "D. Disable statistics"], "correct": "A", "explanation": "ZORDER improves data skipping for the columns frequently used in predicates."}, {"domain": "Analysing Queries", "objective": "Caching Semantics", "scenario": "Users complain they sometimes see older results immediately after data updates.", "question": "Which feature MOST directly explains this behavior?", "options": ["A. Result cache serving prior query results", "B. VACUUM removing new files", "C. Unity Catalog revoking permissions", "D. ZORDER causing stale data"], "correct": "A", "explanation": "Result cache can return cached results depending on cache rules and data change detection."}, {"domain": "Analysing Queries", "objective": "Explain Plan", "scenario": "You need to validate whether the optimizer is using a broadcast join.", "question": "What should you use?", "options": ["A. EXPLAIN or query profile to inspect the physical plan", "B. SHOW GRANTS", "C. DESCRIBE DATABASE", "D. VACUUM"], "correct": "A", "explanation": "EXPLAIN / profile reveals the physical plan including join strategies."}, {"domain": "Analysing Queries", "objective": "Skew", "scenario": "A join takes extremely long because one key value appears in millions of rows, causing one task to dominate runtime.", "question": "Which technique BEST mitigates this?", "options": ["A. Add a random salt to the skewed join key for partitioning", "B. Disable Photon", "C. Remove WHERE filters", "D. Use ORDER BY on the skewed key"], "correct": "A", "explanation": "Salting redistributes skewed keys to reduce straggler tasks during joins/aggregations."}, {"domain": "Analysing Queries", "objective": "Multi-step Logic", "scenario": "You have two queries: Q1 is slow due to scanning 5 TB. After OPTIMIZE ZORDER, Q2 scans 500 GB but is still slow due to shuffle.", "question": "What is the BEST next step?", "options": ["A. Increase file size by splitting into smaller files", "B. Investigate join strategy and consider broadcasting small tables / reducing shuffle", "C. Disable all caches permanently", "D. Convert Delta to CSV"], "correct": "B", "explanation": "After scan reduction, the next bottleneck is often shuffle/join strategy; profiling guides the next optimizations."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Dashboard Performance", "scenario": "A dashboard contains 12 tiles all hitting the same large table with slightly different filters.", "question": "Which approach MOST reduces compute duplication?", "options": ["A. Replace every tile with a separate warehouse", "B. Use a shared base query or view and reference it across tiles", "C. Turn off result caching", "D. Increase the number of dashboard pages"], "correct": "B", "explanation": "Reusing a shared base query/view reduces repeated scanning and improves maintainability."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Parameters & UX", "scenario": "You want users to select a date range once and have it apply to all tiles.", "question": "What is BEST?", "options": ["A. Add filter logic into each query manually without parameters", "B. Use dashboard-level parameters/filters connected to queries", "C. Export the dashboard to PDF and filter there", "D. Use VACUUM before opening the dashboard"], "correct": "B", "explanation": "Dashboard filters/parameters can drive multiple queries for a consistent UX."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Refresh Strategy", "scenario": "Your data updates every 4 hours. Stakeholders want dashboards updated soon after, but you must control cost.", "question": "Which setup BEST meets both needs?", "options": ["A. Keep the warehouse running 24/7 and refresh every minute", "B. Schedule refresh shortly after the pipeline completes and use auto-stop", "C. Disable refresh entirely", "D. Use only manual refresh and no warehouse"], "correct": "B", "explanation": "Schedule refresh aligned to data availability and use auto-stop to reduce idle cost."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Visualization Choice", "scenario": "You need to show how a metric changes over time and highlight seasonality.", "question": "Which visualization is MOST appropriate?", "options": ["A. Pie chart", "B. Line chart with time on the x-axis", "C. Single KPI number only", "D. Scatter plot without time axis"], "correct": "B", "explanation": "Line charts are best for trends over time and seasonality patterns."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Access & Sharing", "scenario": "You need to share a dashboard with a group but ensure they can\u2019t see underlying tables they don\u2019t have permission for.", "question": "What is correct?", "options": ["A. Dashboard sharing bypasses data permissions", "B. Users must have permissions to run the underlying queries/tables; use governed views if needed", "C. Give everyone SELECT on all catalogs", "D. Export to CSV and email it"], "correct": "B", "explanation": "Dashboard access does not override data permissions; governed views can expose only appropriate data."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Drilldowns", "scenario": "Users want to click a bar in a chart to see the underlying records for that category.", "question": "Which feature is MOST relevant?", "options": ["A. Drill-through/drilldown interactions configured in the dashboard", "B. VACUUM retention", "C. Unity Catalog metastore migration", "D. Cluster policies"], "correct": "A", "explanation": "Dashboards can be configured with interactions that filter or navigate to detail views."}, {"domain": "Working with Dashboards and Visualisations in Databricks", "objective": "Multi-step Logic", "scenario": "A tile is slow. Profile shows scan is small but many repeated executions occur when users adjust filters rapidly.", "question": "What is BEST?", "options": ["A. Remove all filters", "B. Use parameters with sensible defaults and reduce auto-refresh triggers (avoid re-running on every tiny change)", "C. Convert Delta to JSON", "D. Disable Photon"], "correct": "B", "explanation": "When scans are small, reducing unnecessary repeated executions can be the biggest win."}, {"domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Genie Governance", "scenario": "A Genie space must provide consistent answers for 'Active Customers' across teams.", "question": "What is BEST?", "options": ["A. Let each user define the metric ad-hoc in prompts", "B. Back Genie with certified datasets/semantic definitions maintained centrally", "C. Disable permissions so Genie can see everything", "D. Copy data into personal schemas per user"], "correct": "B", "explanation": "Certified datasets and curated definitions reduce ambiguity and improve consistency."}, {"domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Sharing", "scenario": "You want to share a Genie space with analysts in another team while preventing edits to curated logic.", "question": "Which is BEST?", "options": ["A. Share with view-only permissions; keep editing restricted to owners/maintainers", "B. Give everyone owner permission", "C. Export prompts to a text file and email them", "D. Disable Unity Catalog"], "correct": "A", "explanation": "Role-based sharing protects curated assets while allowing consumption."}, {"domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Maintenance", "scenario": "A referenced table in a Genie space is renamed, and responses start failing.", "question": "What is the BEST fix?", "options": ["A. Delete the Genie space", "B. Update the space to reference the new table name and validate dependent assets", "C. Turn off caching", "D. Change warehouse size only"], "correct": "B", "explanation": "Maintaining Genie spaces includes updating references and validating logic after changes."}, {"domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Prompt Reliability", "scenario": "Users ask vague questions and get inconsistent outputs.", "question": "Which step MOST improves reliability?", "options": ["A. Increase SQL warehouse size", "B. Add curated example questions and definitions for key fields/metrics", "C. Remove all documentation", "D. Disable permissions checks"], "correct": "B", "explanation": "Curation (examples + definitions) reduces ambiguity and guides consistent interpretations."}, {"domain": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Multi-step Logic", "scenario": "A Genie space should answer questions using only a governed 'gold' table, but it sometimes pulls from a 'silver' table.", "question": "What is BEST?", "options": ["A. Restrict access and explicitly bind the space to the certified gold dataset", "B. Add more tables so it has more choice", "C. Disable Unity Catalog", "D. Use only CSV exports"], "correct": "A", "explanation": "Least privilege plus explicit binding to certified datasets reduces accidental use of non-authoritative sources."}, {"domain": "Data Modelling with Databricks SQL", "objective": "Dimensional Modeling", "scenario": "A fact table contains transactions and dimensions include customer and product. Queries frequently aggregate by product category and month.", "question": "Which design BEST supports this?", "options": ["A. Snowflake schema with deeply normalized dimensions only", "B. Star schema with a transaction fact table and conformed dimensions", "C. Single table with nested JSON for dimensions", "D. Separate fact table per dashboard tile"], "correct": "B", "explanation": "A star schema supports fast BI aggregations and simpler joins for analytics."}, {"domain": "Data Modelling with Databricks SQL", "objective": "Slowly Changing Dimensions", "scenario": "You need to preserve historical customer attributes for past transactions (e.g., segment changes).", "question": "Which approach is MOST appropriate?", "options": ["A. Always overwrite the dimension to keep only the latest", "B. Implement SCD Type 2 with effective dates/versioning", "C. Store attributes only in the fact table", "D. Disable joins in dashboards"], "correct": "B", "explanation": "SCD Type 2 preserves history via versioned dimension rows and effective date ranges."}, {"domain": "Securing Data", "objective": "Least Privilege", "scenario": "A team should be able to query a view but not the underlying raw table.", "question": "Which setup is BEST?", "options": ["A. Grant SELECT on the raw table and hope they use the view", "B. Grant SELECT on the view only; keep raw table restricted", "C. Give them ownership of the schema", "D. Disable Unity Catalog permissions"], "correct": "B", "explanation": "Granting access to governed views supports least privilege and controlled exposure."}, {"domain": "Securing Data", "objective": "Object Ownership", "scenario": "A user created a table in a shared schema and leaves the company. Others must maintain it.", "question": "What is BEST?", "options": ["A. Drop the table immediately", "B. Transfer ownership to a group/service principal and use group-based grants", "C. Keep ownership with the departed user", "D. Copy the table to each user\u2019s personal schema"], "correct": "B", "explanation": "Transferring ownership to a managed principal/group improves continuity and governance."}, {"domain": "Securing Data", "objective": "Row-level Security", "scenario": "HR data must be filtered so managers only see employees in their org, enforced centrally.", "question": "Which is BEST?", "options": ["A. Let managers filter in dashboards themselves", "B. Use dynamic views (or row filters) with user attributes to enforce row-level security", "C. Export to Excel and password-protect it", "D. Store data in DBFS without catalog registration"], "correct": "B", "explanation": "Central RLS via dynamic views/row filters prevents bypass and ensures consistent enforcement."}, {"domain": "Securing Data", "objective": "Auditing", "scenario": "Security asks for evidence of who accessed a sensitive table and when.", "question": "Which capability BEST supports this?", "options": ["A. Dashboard color themes", "B. Audit logs / UC access logs (where configured)", "C. OPTIMIZE history only", "D. ZORDER stats"], "correct": "B", "explanation": "Audit/access logs provide records of access for compliance and investigations."}];
+
+  let idx = 0;
+  let answers = {};
+  let flagged = {};
+  let reviewed = {};
+  let timeRemaining = 90 * 60;
+
+  function loadState() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    try {
+      const s = JSON.parse(raw);
+      answers = s.answers || answers;
+      flagged = s.flagged || flagged;
+      reviewed = s.reviewed || reviewed;
+      timeRemaining = typeof s.timeRemaining === "number" ? s.timeRemaining : timeRemaining;
+      idx = typeof s.idx === "number" ? Math.min(Math.max(s.idx,0), QUESTIONS.length-1) : idx;
+    } catch(e) {}
+  }
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({answers, flagged, reviewed, timeRemaining, idx}));
+  }
+  function fmtTime(s) {
+    const m = Math.floor(s/60), sec = s%60;
+    return m + ":" + (sec<10 ? "0"+sec : sec);
+  }
+  const timerEl = document.getElementById("timer");
+  function startTimer() {
+    timerEl.textContent = fmtTime(timeRemaining);
+    setInterval(() => {
+      timeRemaining = Math.max(0, timeRemaining-1);
+      timerEl.textContent = fmtTime(timeRemaining);
+      if (timeRemaining % 5 === 0) saveState();
+      if (timeRemaining === 0) submitExam();
+    }, 1000);
+  }
+
+  function buildNav() {
+    const nav = document.getElementById("nav");
+    nav.innerHTML = "";
+    for (let i=0;i<QUESTIONS.length;i++) {
+      const b = document.createElement("button");
+      b.textContent = (i+1);
+      b.addEventListener("click", ()=>{ idx=i; render(); });
+      nav.appendChild(b);
+    }
+  }
+  function updateNav() {
+    const buttons = document.querySelectorAll("#nav button");
+    buttons.forEach((b,i)=>{
+      b.classList.toggle("current", i===idx);
+      b.classList.toggle("answered", !!answers[i]);
+      b.classList.toggle("flagged", !!flagged[i]);
+    });
+    document.getElementById("flagHint").textContent = flagged[idx] ? "This question is flagged." : "";
+  }
+
+  function hideFeedback() {
+    const fb = document.getElementById("feedback");
+    fb.style.display = "none";
+    fb.className = "feedback";
+    fb.innerHTML = "";
+  }
+  function showFeedback() {
+    const q = QUESTIONS[idx];
+    const fb = document.getElementById("feedback");
+    const a = answers[idx];
+    fb.style.display = "block";
+    if (!a) {
+      fb.className = "feedback";
+      fb.innerHTML = "Select an answer first.";
+      return;
+    }
+    if (a === q.correct) {
+      fb.className = "feedback ok";
+      fb.innerHTML = `<strong>Correct ✅</strong><br><div class="muted" style="margin-top:6px;">${q.explanation}</div>`;
+    } else {
+      fb.className = "feedback bad";
+      fb.innerHTML = `<strong>Incorrect ❌</strong><br>Correct answer: <strong>${q.correct}</strong><br><div class="muted" style="margin-top:6px;">${q.explanation}</div>`;
+    }
+  }
+
+  function render() {
+    const q = QUESTIONS[idx];
+    document.getElementById("qCount").textContent = `Question ${idx+1} / ${QUESTIONS.length}`;
+    document.getElementById("domainTag").textContent = q.domain;
+    document.getElementById("objectiveTag").textContent = `Objective: ${q.objective}`;
+    document.getElementById("scenario").innerHTML = `<strong>Scenario:</strong> ${q.scenario}`;
+    document.getElementById("question").textContent = q.question;
+
+    const opts = document.getElementById("options");
+    opts.innerHTML = "";
+    q.options.forEach(line => {
+      const letter = line.trim().charAt(0);
+      const label = document.createElement("label");
+      label.innerHTML = `<input type="radio" name="opt" value="${letter}"> ${line}`;
+      const input = label.querySelector("input");
+      input.checked = (answers[idx] === letter);
+      input.addEventListener("change", ()=>{
+        answers[idx] = letter;
+        saveState();
+        updateNav();
+        if (!reviewed[idx]) hideFeedback();
+      });
+      opts.appendChild(label);
+    });
+
+    if (reviewed[idx]) showFeedback(); else hideFeedback();
+    updateNav();
+    saveState();
+  }
+
+  document.getElementById("prevBtn").addEventListener("click", ()=>{ if(idx>0) idx--; render(); });
+  document.getElementById("nextBtn").addEventListener("click", ()=>{ if(idx<QUESTIONS.length-1) idx++; render(); });
+  document.getElementById("flagBtn").addEventListener("click", ()=>{ flagged[idx]=!flagged[idx]; saveState(); updateNav(); });
+  document.getElementById("reviewBtn").addEventListener("click", ()=>{ reviewed[idx]=true; saveState(); showFeedback(); });
+  document.getElementById("clearBtn").addEventListener("click", ()=>{ delete answers[idx]; delete reviewed[idx]; saveState(); render(); });
+
+  function submitExam() {
+    let score=0;
+    const domainTotals={}, domainCorrect={};
+    QUESTIONS.forEach((q,i)=>{
+      domainTotals[q.domain]=(domainTotals[q.domain]||0)+1;
+      domainCorrect[q.domain]=(domainCorrect[q.domain]||0);
+      if (answers[i]===q.correct) { score++; domainCorrect[q.domain]++; }
+    });
+    const res=document.getElementById("results");
+    res.style.display="block";
+    document.getElementById("scoreLine").textContent =
+      `Score: ${score} / ${QUESTIONS.length} (${Math.round((score/QUESTIONS.length)*100)}%)`;
+
+    const breakdown=document.getElementById("breakdown");
+    breakdown.innerHTML="";
+    Object.keys(domainTotals).forEach(d=>{
+      const total=domainTotals[d], corr=domainCorrect[d]||0;
+      const pct=Math.round((corr/total)*100);
+      const row=document.createElement("div");
+      row.style.marginTop="10px";
+      row.innerHTML=`
+        <div style="display:flex; justify-content:space-between; gap:10px;">
+          <div style="font-weight:800;">${d}</div>
+          <div class="muted">${corr}/${total} (${pct}%)</div>
+        </div>
+        <div class="bar"><div style="width:${pct}%;"></div></div>
+      `;
+      breakdown.appendChild(row);
+    });
+    saveState();
+  }
+  document.getElementById("submitBtn").addEventListener("click", submitExam);
+
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    localStorage.removeItem(STORAGE_KEY);
+    answers={}; flagged={}; reviewed={}; timeRemaining=90*60; idx=0;
+    timerEl.textContent="90:00";
+    buildNav();
+    render();
+  });
+
+  loadState();
+  buildNav();
+  render();
+  startTimer();
+} catch (e) {
+  document.getElementById("errorBanner").style.display="block";
+  console.error(e);
+}
+</script>
+</body>
+</html>

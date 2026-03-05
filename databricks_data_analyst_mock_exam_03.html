@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Databricks Data Analyst Associate – Hard Mock Exam (Set B, 50Q)</title>
+  <style>
+    :root {
+      --bg:#0b1020; --panel:#111a33; --panel2:#0f1730; --text:#eef2ff; --muted:#b7c0ff;
+      --accent:#6ea8ff; --good:#58d68d; --bad:#ff6b6b; --warn:#ffd166; --border:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:radial-gradient(1200px 800px at 10% 0%, #12204a 0%, var(--bg) 55%);
+      color:var(--text);}
+    header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.85);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--border);}
+    .wrap{max-width:1150px;margin:0 auto;padding:14px 16px;}
+    .top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .title{display:flex;flex-direction:column;gap:2px}
+    h1{margin:0;font-size:16px;letter-spacing:.2px}
+    .sub{margin:0;color:var(--muted);font-size:12px}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .pill{border:1px solid var(--border);background:rgba(255,255,255,.04);
+      padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .pill strong{color:var(--text);font-weight:700}
+    .btn{cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.06);
+      color:var(--text);padding:9px 12px;border-radius:12px;font-size:13px}
+    .btn:hover{border-color:rgba(255,255,255,.22)}
+    .btn.primary{border-color:rgba(110,168,255,.45);background:rgba(110,168,255,.18)}
+    .btn.danger{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.14)}
+    .grid{display:grid;grid-template-columns:310px 1fr;gap:14px;}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    .card{border:1px solid var(--border);background:rgba(17,26,51,.72);border-radius:18px;overflow:hidden}
+    .card h2{margin:0;font-size:13px;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.03)}
+    .nav{padding:12px 12px 14px}
+    .navgrid{display:grid;grid-template-columns:repeat(6, 1fr);gap:8px}
+    .qbtn{cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,.05);
+      color:var(--text);border-radius:12px;padding:10px 0;font-size:12px;position:relative}
+    .qbtn:hover{border-color:rgba(255,255,255,.22)}
+    .qbtn.active{outline:2px solid rgba(110,168,255,.65);outline-offset:1px}
+    .qbtn.answered{background:rgba(88,214,141,.11);border-color:rgba(88,214,141,.25)}
+    .qbtn.flagged::after{content:"⚑";position:absolute;top:3px;right:6px;font-size:11px;color:var(--warn)}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .meta .pill{flex:1;min-width:120px;text-align:center}
+    .main{padding:14px}
+    .badge{display:inline-flex;gap:6px;align-items:center;padding:5px 10px;border-radius:999px;
+      border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}
+    .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+    .badge.multi .dot{background:var(--warn)}
+    .sectionline{margin-top:8px;color:var(--muted);font-size:12px}
+    .prompt{margin-top:10px;white-space:pre-wrap;line-height:1.42}
+    .objective{color:var(--muted);font-size:12px;margin-top:6px}
+    .options{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+    label.opt{cursor:pointer;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;
+      border:1px solid var(--border);background:rgba(255,255,255,.04)}
+    label.opt:hover{border-color:rgba(255,255,255,.22)}
+    .opt input{margin-top:3px}
+    .opt .letter{width:22px;height:22px;border-radius:8px;display:grid;place-items:center;
+      border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--muted);font-size:12px;flex:none}
+    .opt .txt{font-size:13px;line-height:1.35}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .spacer{flex:1}
+    .explain{margin-top:14px;border-top:1px dashed rgba(255,255,255,.18);padding-top:12px;display:none}
+    .explain .head{display:flex;gap:8px;align-items:center}
+    .explain .head b{font-size:13px}
+    .explain .body{margin-top:6px;color:var(--muted);font-size:13px;line-height:1.4;white-space:pre-wrap}
+    .result{padding:14px;display:none}
+    .score{font-size:28px;font-weight:800;letter-spacing:.2px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid var(--border);padding:10px 8px;text-align:left;font-size:13px}
+    th{color:var(--muted);font-weight:600}
+    .good{color:var(--good)} .bad{color:var(--bad)} .muted{color:var(--muted)}
+    .bannerErr{display:none;margin:12px 0 0;padding:10px 12px;border-radius:14px;
+      border:1px solid rgba(255,107,107,.35);background:rgba(255,107,107,.12);color:var(--text);font-size:13px}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;
+      padding:2px 6px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.05);color:var(--muted)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <h1>Databricks Certified Data Analyst Associate – Hard Mock Exam (Set B)</h1>
+        <p class="sub">50 questions • single & multi-select • includes multi-step logic items • autosaves locally</p>
+      </div>
+      <div class="pillrow">
+        <div class="pill"><strong id="pillAnswered">0</strong> answered</div>
+        <div class="pill"><strong id="pillFlagged">0</strong> flagged</div>
+        <div class="pill">Time left: <strong id="pillTimer">90:00</strong></div>
+        <button class="btn" id="btnReset">Reset attempt</button>
+        <button class="btn primary" id="btnSubmit">Submit</button>
+      </div>
+    </div>
+    <div id="bannerErr" class="bannerErr">
+      <b>Oops — the app didn’t initialize.</b>
+      <div class="muted" style="margin-top:4px">Open DevTools Console to see the error. If you want, paste it here and I’ll fix it fast.</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <h2>Question navigator</h2>
+      <div class="nav">
+        <div class="navgrid" id="navgrid"></div>
+        <div class="meta">
+          <div class="pill"><strong id="pillCurrent">1</strong> / <strong id="pillTotal">50</strong></div>
+          <div class="pill"><strong id="pillMulti">0</strong> multi-step</div>
+        </div>
+        <div style="margin-top:10px;color:var(--muted);font-size:12px;line-height:1.35">
+          Tips: <span class="kbd">←</span>/<span class="kbd">→</span> navigate • <span class="kbd">F</span> flag • <span class="kbd">S</span> submit
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Question</h2>
+      <div class="main" id="main">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="badge" id="badgeNum"><span class="dot"></span> Q1</span>
+          <span class="badge" id="badgeType"><span class="dot"></span> Single-select</span>
+        </div>
+        <div class="sectionline" id="sectionline"></div>
+        <div class="objective" id="objective"></div>
+        <div class="prompt" id="prompt"></div>
+        <div class="options" id="options"></div>
+
+        <div class="actions">
+          <button class="btn" id="btnPrev">← Prev</button>
+          <button class="btn" id="btnNext">Next →</button>
+          <button class="btn" id="btnFlag">Flag</button>
+          <div class="spacer"></div>
+          <button class="btn primary" id="btnReveal">Reveal explanation</button>
+        </div>
+
+        <div class="explain" id="explain">
+          <div class="head" id="explainHead"></div>
+          <div class="body" id="explainBody"></div>
+        </div>
+
+        <div class="result" id="result">
+          <div class="score" id="score"></div>
+          <div class="muted" id="scoreSub" style="margin-top:4px"></div>
+          <table id="breakdown">
+            <thead><tr><th>Domain</th><th>Correct</th><th>Answered</th><th>Total</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div class="actions" style="margin-top:14px">
+            <button class="btn" id="btnReview">Review answers</button>
+            <div class="spacer"></div>
+            <button class="btn danger" id="btnReset2">Reset attempt</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(() => {
+  const STORAGE_KEY = "dbx_da_hard_mock_set_b_v1";
+  const DURATION_SEC = 90 * 60;
+
+  const QUESTIONS = [{"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Explain how the Databricks Data Intelligence Platform unifies governance and compute.", "scenario": "Your org is moving from a legacy BI stack to Databricks. Security needs consistent access controls across notebooks, SQL, and BI dashboards, while different teams will use different compute types.", "question": "Which platform capability best satisfies 'one set of permissions across assets' while still allowing multiple compute experiences?", "options": ["Cluster policies that restrict cluster creation for users", "Unity Catalog as a centralized governance layer for data and AI assets", "SQL Warehouses as the only supported compute for BI", "Delta Lake as the only supported storage format"], "answer": [1], "explanation": "Unity Catalog provides centralized governance (permissions, lineage, auditing) across data and related assets, independent of whether users query via notebooks, Databricks SQL, or dashboards.", "multi": false, "select_count": 1}, {"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Differentiate workspaces, metastore, catalogs, schemas, and tables.", "scenario": "A new analyst confuses workspace folders with governed data objects. They want to understand where tables live and what controls access.", "question": "Which statement is correct?", "options": ["A workspace folder controls table access because tables are stored inside folders.", "Tables are governed in Unity Catalog objects (catalog/schema/table); the workspace is primarily for code/artifacts and UI organization.", "A metastore is the same as a SQL Warehouse and only affects dashboard queries.", "Catalogs are optional; permissions are only applied at the table level."], "answer": [1], "explanation": "Workspace artifacts (queries, notebooks, dashboards) are separate from governed data objects. Data lives in UC objects; access is granted via UC privileges at multiple levels.", "multi": false, "select_count": 1}, {"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Identify when to use serverless vs classic SQL Warehouses.", "scenario": "You have unpredictable dashboard traffic (quiet most of the day, heavy spikes during exec meetings). Cost predictability matters, and you want minimal ops work.", "question": "Which choice is most aligned with these requirements?", "options": ["Use a classic SQL Warehouse with a fixed cluster size and auto-stop disabled.", "Use a serverless SQL Warehouse to scale with demand and reduce operational tuning.", "Run all dashboards on an all-purpose cluster to reuse notebook libraries.", "Pin dashboards to a single job cluster to avoid cold starts."], "answer": [1], "explanation": "Serverless SQL Warehouses are designed for elastic, low-ops SQL workloads and handle spiky demand better than fixed-size classic warehouses.", "multi": false, "select_count": 1}, {"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Interpret lineage and impact analysis at a high level.", "scenario": "A dashboard KPI is wrong. You suspect a downstream view changed and want to quickly identify upstream sources and dependent assets.", "question": "What should you use first to understand upstream/downstream dependencies?", "options": ["Cluster event logs in the workspace admin console", "Unity Catalog data lineage / column-level lineage view (where available) for the view and dashboard queries", "OPTIMIZE history on the underlying tables", "Notebook version history for the ETL notebook"], "answer": [1], "explanation": "Lineage/impact analysis in Unity Catalog (and related UI surfaces) is built to trace dependencies between tables/views/queries and helps isolate where a change could have affected a metric.", "multi": false, "select_count": 1}, {"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Choose the best workspace artifact for a SQL-first workflow.", "scenario": "You want an analyst-friendly, versionable SQL object that can be reused across dashboards and shared with a team, without requiring notebooks.", "question": "Which artifact best fits?", "options": ["A Databricks Repo with Python notebooks", "A saved SQL query (in Databricks SQL) with parameters and permissions", "A job cluster configured for interactive use", "A DBFS folder of CSV extracts"], "answer": [1], "explanation": "Saved SQL queries are first-class artifacts in Databricks SQL, can be permissioned/shared, parameterized, and reused in dashboards.", "multi": false, "select_count": 1}, {"section": "Understanding of Databricks Data Intelligence Platform", "objective": "Recognize Lakehouse concepts relevant to analytics.", "scenario": "Your team stores bronze/silver/gold tables and wants reliable, repeatable BI queries with ACID correctness.", "question": "Which combination most directly enables ACID tables with schema enforcement and time travel?", "options": ["Parquet + DBFS + workspace folders", "Delta Lake tables + transaction log", "CSV + external tables + auto-stop", "JDBC ingestion + temporary views"], "answer": [1], "explanation": "Delta Lake adds an ACID transaction log, schema enforcement/evolution controls, and time travel capabilities on top of cloud object storage.", "multi": false, "select_count": 1}, {"section": "Managing Data", "objective": "Apply correct table types for managed vs external storage.", "scenario": "You need a table that remains governed in Unity Catalog but points to an existing cloud storage location that is managed by another team. Dropping the table must NOT delete the underlying data.", "question": "Which is the best approach?", "options": ["Create a managed table so Databricks owns the storage and drops files when dropped.", "Create an external table pointing at the existing location and manage access via UC.", "Use a temp view over the location so it persists across sessions.", "Copy data into DBFS and create a local table."], "answer": [1], "explanation": "External tables reference existing storage locations; dropping them does not delete underlying files, while governance is still handled via UC privileges.", "multi": false, "select_count": 1}, {"section": "Managing Data", "objective": "Use table maintenance operations appropriately.", "scenario": "A fact table is heavily queried by dashboards, and you noticed many small files after frequent incremental loads. You want faster reads with minimal query changes.", "question": "Which operation is most appropriate to reduce small-file overhead?", "options": ["VACUUM with a 0-hour retention", "OPTIMIZE to compact files (optionally with ZORDER on common filter columns)", "REFRESH TABLE to rebuild statistics only", "ALTER TABLE SET TBLPROPERTIES('delta.appendOnly'='true')"], "answer": [1], "explanation": "OPTIMIZE compacts small files into larger ones; ZORDER can further improve data skipping for common predicates.", "multi": false, "select_count": 1}, {"section": "Managing Data", "objective": "Reason about time travel for debugging.", "scenario": "A pipeline wrote bad data yesterday at 02:00. You need to compare today's table state to the state right before the bad write, without restoring anything yet.", "question": "Which query pattern supports this best?", "options": ["SELECT * FROM table VERSION AS OF 0", "SELECT * FROM table TIMESTAMP AS OF 'yesterday 01:59:59'", "SELECT * FROM table WHERE _commit_timestamp < now() - interval 1 day", "SELECT * FROM table SNAPSHOT AS OF 'yesterday'"], "answer": [1], "explanation": "Delta time travel supports VERSION AS OF and TIMESTAMP AS OF for reading historical snapshots without modifying the table.", "multi": false, "select_count": 1}, {"section": "Managing Data", "objective": "Choose the right object for reusable logic with late binding.", "scenario": "You want a reusable definition that always reflects the latest data in underlying tables and can be queried by multiple teams in SQL Warehouses.", "question": "Which object is most appropriate?", "options": ["A temporary view created in a notebook session", "A persisted view in Unity Catalog (CREATE VIEW)", "A notebook-scoped global temp view", "A DBFS mount with a SQL script file"], "answer": [1], "explanation": "A persisted view in Unity Catalog is reusable across sessions and compute, reflecting latest underlying table data.", "multi": false, "select_count": 1}, {"section": "Importing Data", "objective": "Select the best ingestion method for cloud object storage incrementals.", "scenario": "New JSON files land continuously in cloud storage with evolving fields. You need incremental ingestion with schema evolution handling and minimal custom code.", "question": "Which is the best fit?", "options": ["Manual COPY INTO with a fixed schema and overwrite mode", "Auto Loader (cloudFiles) to incrementally ingest with schema inference/evolution options", "JDBC load into a temp view every time", "Download files locally and upload to DBFS"], "answer": [1], "explanation": "Auto Loader is designed for incremental file ingestion from object storage with scalable file discovery and schema evolution support.", "multi": false, "select_count": 1}, {"section": "Importing Data", "objective": "Use COPY INTO correctly for idempotent loads.", "scenario": "You load CSV files from a folder into a Delta table using COPY INTO. The job may rerun after a failure, and you must avoid duplicate ingestion.", "question": "Which COPY INTO behavior helps with this requirement by default?", "options": ["It always overwrites the target table.", "It tracks loaded files and skips previously ingested files unless FORCE is used.", "It merges rows using a primary key automatically.", "It converts CSV to JSON before writing to Delta."], "answer": [1], "explanation": "COPY INTO keeps a record of loaded files for a target table, enabling idempotent ingestion by skipping already loaded files on reruns unless forced.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Use correct join semantics for filtering with unmatched rows.", "scenario": "You need all customers, even those without orders, but you only want orders from the last 30 days when they exist.", "question": "Which query pattern is correct?", "options": ["SELECT ... FROM customers c INNER JOIN orders o ON c.id=o.customer_id WHERE o.order_date >= current_date()-30", "SELECT ... FROM customers c LEFT JOIN orders o ON c.id=o.customer_id AND o.order_date >= current_date()-30", "SELECT ... FROM customers c RIGHT JOIN orders o ON c.id=o.customer_id AND o.order_date >= current_date()-30", "SELECT ... FROM customers c FULL JOIN orders o WHERE o.order_date >= current_date()-30"], "answer": [1], "explanation": "Put the date predicate in the JOIN condition with LEFT JOIN so customers without recent orders remain, with NULLs on order fields.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Apply window functions to deduplicate with a deterministic rule.", "scenario": "You have multiple records per user per day and want the most recent record by event_time; ties should break by higher event_id.", "question": "Which is the best approach?", "options": ["SELECT DISTINCT user_id, day, * FROM events", "Use ROW_NUMBER() OVER (PARTITION BY user_id, day ORDER BY event_time DESC, event_id DESC) and filter row_number = 1", "Use RANK() OVER (...) and filter rank = 1", "Use GROUP BY user_id, day and MAX(*)"], "answer": [1], "explanation": "ROW_NUMBER provides deterministic single-row selection per partition when ordering includes tie-breakers.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Understand how QUALIFY can simplify analytic filtering.", "scenario": "You want the top 3 products by revenue per region and prefer a single SELECT without nesting.", "question": "Which syntax is most appropriate in Databricks SQL?", "options": ["Use HAVING row_number() <= 3", "Use QUALIFY ROW_NUMBER() OVER (PARTITION BY region ORDER BY revenue DESC) <= 3", "Use WHERE ROW_NUMBER() OVER (...) <= 3", "Use FILTER (WHERE ...) on SUM"], "answer": [1], "explanation": "Databricks SQL supports QUALIFY to filter results based on window functions without subqueries.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Parameterize queries for dashboards safely.", "scenario": "A dashboard has a date parameter. Users should only be able to select a date, not inject SQL.", "question": "Which is the best practice?", "options": ["String-concatenate the parameter into the SQL text.", "Use a dashboard parameter bound to a query parameter (typed) and reference it with parameter syntax supported by Databricks SQL.", "Ask users to edit the SQL query manually.", "Use dynamic SQL with EXECUTE IMMEDIATE built from the parameter."], "answer": [1], "explanation": "Typed parameters in Databricks SQL/dashboards avoid ad-hoc string concatenation and reduce injection risk while improving usability.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Choose the correct function for timestamp normalization.", "scenario": "Your events have timestamps in UTC, but business reporting needs Europe/Dublin local time (including DST shifts).", "question": "Which approach is most appropriate in Databricks SQL?", "options": ["CAST(event_ts AS DATE) and assume it matches local time", "Use from_utc_timestamp(event_ts, 'Europe/Dublin') to convert to local time", "Add a fixed +1 hour offset", "Use unix_timestamp(event_ts) / 3600"], "answer": [1], "explanation": "from_utc_timestamp converts UTC to a named timezone and handles DST transitions correctly.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Use MERGE for upserts with late-arriving data.", "scenario": "A dimension table receives late updates. You need to update existing rows by id and insert new ones.", "question": "Which statement best fits?", "options": ["INSERT OVERWRITE INTO dim SELECT * FROM staging", "MERGE INTO dim USING staging ON dim.id = staging.id WHEN MATCHED THEN UPDATE SET * WHEN NOT MATCHED THEN INSERT *", "UPDATE dim SET * FROM staging", "REPLACE TABLE dim AS SELECT * FROM staging"], "answer": [1], "explanation": "MERGE supports matched updates and unmatched inserts in one atomic operation for Delta tables.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Multi-step: predict query result with NULL handling (3-valued logic).", "scenario": "Table t has rows: (id=1, flag=true), (id=2, flag=false), (id=3, flag=NULL). You run:\n\nSELECT COUNT(*) AS c FROM t WHERE NOT flag;", "question": "What is the value of c?", "options": ["0", "1", "2", "3"], "answer": [1], "explanation": "In SQL, NOT NULL is NULL, and WHERE filters only TRUE. NOT flag is TRUE only when flag is FALSE, so only id=2 matches.", "multi": true, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Multi-step: compute result after join + aggregation with missing matches.", "scenario": "customers: (1,'A'),(2,'B'),(3,'C')\norders: (cust_id=1, amt=10),(cust_id=1, amt=5),(cust_id=2, amt=NULL)\nQuery:\nSELECT c.id, SUM(o.amt) AS s\nFROM customers c LEFT JOIN orders o ON c.id=o.cust_id\nGROUP BY c.id\nORDER BY c.id;", "question": "What are the SUM results (s) for ids 1,2,3?", "options": ["(1→15, 2→0, 3→0)", "(1→15, 2→NULL, 3→NULL)", "(1→15, 2→NULL, 3→0)", "(1→15, 2→0, 3→NULL)"], "answer": [1], "explanation": "SUM ignores NULLs; for id=2 all values are NULL so SUM returns NULL. For id=3 there are no rows from orders, so SUM over all-NULL (from LEFT join) returns NULL as well.", "multi": true, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Understand semantics of COUNT vs COUNT(column).", "scenario": "A table has 10 rows; column x is NULL in 3 rows.", "question": "Which statement is true?", "options": ["COUNT(x) returns 10 and COUNT(*) returns 7", "COUNT(x) returns 7 and COUNT(*) returns 10", "COUNT(x) returns 3 and COUNT(*) returns 10", "Both return 10"], "answer": [1], "explanation": "COUNT(*) counts rows; COUNT(column) counts non-NULL values.", "multi": false, "select_count": 1}, {"section": "Executing queries using Databricks SQL and Databricks SQL Warehouses", "objective": "Control query execution context for governance.", "scenario": "A query runs fine in a notebook but fails in a SQL Warehouse with 'table not found'. The analyst used an unqualified table name 'sales'.", "question": "What is the most likely fix?", "options": ["Increase SQL Warehouse size so it can see more schemas", "Qualify the object name with catalog and schema (e.g., main.analytics.sales) or set the correct current schema", "Convert the table to Parquet", "Move the table into the workspace folder"], "answer": [1], "explanation": "Different contexts can have different current catalog/schema. Qualifying names or setting the schema resolves name resolution issues.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Interpret the purpose of EXPLAIN in Databricks SQL.", "scenario": "A query is slow. You want to understand whether it is scanning too much data, shuffling heavily, or not using partition pruning.", "question": "What should you use first?", "options": ["DESCRIBE HISTORY on the table", "EXPLAIN (or Query Profile) to view the physical plan and operators", "SHOW GRANTS on the table", "REFRESH TABLE to reload metadata"], "answer": [1], "explanation": "EXPLAIN/Query Profile shows the execution plan, including scans, joins, shuffles, and can hint at missing pruning or inefficient join strategies.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Identify a broadcast join opportunity.", "scenario": "You join a 20M-row fact table to a 5k-row dimension table and notice a large shuffle join in the profile. You want to reduce shuffle cost.", "question": "Which change is most likely to help?", "options": ["Sort both tables by the join key before joining", "Use a broadcast join hint (or ensure auto-broadcast is allowed) for the small dimension", "Replace the join with UNION ALL", "Disable AQE (adaptive query execution)"], "answer": [1], "explanation": "Broadcasting a small dimension avoids shuffling the large fact table by sending the small table to all executors.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Recognize symptoms of data skew in joins.", "scenario": "A join job has long tail tasks; the profile shows one partition taking much longer than others. The join key has a 'UNKNOWN' value in 40% of rows.", "question": "What is the most likely issue?", "options": ["Cache eviction due to small cluster size", "Skew on the join key causing uneven partition sizes", "Too many small files causing driver OOM", "Missing table statistics only"], "answer": [1], "explanation": "Highly frequent key values lead to skew, causing some tasks to process far more data than others.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Multi-step: choose best indexing/optimization strategy based on predicates.", "scenario": "A Delta table 'events' is queried mostly with predicates on (event_date, country) and occasionally on (user_id). The table is partitioned by event_date. Queries filtering country are still slow due to large scans within each day.", "question": "Which change is most appropriate to improve country-filter performance without changing partitioning?", "options": ["Add ZORDER BY (country) during OPTIMIZE runs", "Change partitioning to user_id", "Run VACUUM daily with 0-hour retention", "Convert the table to a view"], "answer": [0], "explanation": "ZORDER can co-locate similar values (like country) within files to improve data skipping beyond partition pruning on event_date.", "multi": true, "select_count": 1}, {"section": "Analysing Queries", "objective": "Use statistics to improve query planning.", "scenario": "Your query plan consistently chooses a bad join order. You suspect the optimizer lacks accurate table stats after large loads.", "question": "What should you do?", "options": ["Run ANALYZE TABLE ... COMPUTE STATISTICS (and/or for columns) on key tables", "Run OPTIMIZE without compaction", "Disable the cost-based optimizer", "Only run REFRESH TABLE"], "answer": [0], "explanation": "Computing statistics helps the optimizer estimate cardinalities and choose better join strategies.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Understand cache effects in SQL Warehouses.", "scenario": "You run the same dashboard query twice. The second run is much faster, but you need consistent performance for many users.", "question": "Which is the best interpretation?", "options": ["Delta time travel made the second query faster", "The SQL Warehouse cached data/results, reducing IO/compute on repeat execution", "VACUUM automatically ran between executions", "Unity Catalog permissions were relaxed on the second run"], "answer": [1], "explanation": "Warehouses may leverage caching layers (data cache / result cache) that can speed repeated queries.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Detect missing partition pruning.", "scenario": "A partitioned table by date still shows full table scan. The filter uses a derived expression: WHERE to_date(ts) = '2025-10-01'.", "question": "Which rewrite is most likely to enable partition pruning if the partition column is 'event_date'?", "options": ["WHERE cast(ts as string) like '2025-10-01%'", "WHERE event_date = DATE '2025-10-01'", "WHERE year(ts)=2025 AND month(ts)=10", "WHERE ts BETWEEN '2025-10-01' AND '2025-10-02'"], "answer": [1], "explanation": "Filtering directly on the partition column (event_date) enables pruning; derived expressions on other columns often prevent it.", "multi": false, "select_count": 1}, {"section": "Analysing Queries", "objective": "Multi-step: reason about predicate placement changing results/perf.", "scenario": "You need customers with zero orders in the last 90 days. Two analysts propose:\nA) LEFT JOIN orders o ON c.id=o.cust_id WHERE o.order_date >= current_date()-90\nB) LEFT JOIN orders o ON c.id=o.cust_id AND o.order_date >= current_date()-90 WHERE o.cust_id IS NULL", "question": "Which is correct and why?", "options": ["A is correct; WHERE filters after join but preserves unmatched customers", "B is correct; it keeps all customers, restricts join to last-90-day orders, then selects those with no match", "Both are equivalent in all cases", "Neither works; you must use FULL OUTER JOIN"], "answer": [1], "explanation": "A turns the LEFT JOIN into an INNER-like filter because o.order_date in WHERE removes NULL-extended rows. B restricts joined orders in ON and then filters unmatched customers via IS NULL.", "multi": true, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Design parameter-driven dashboards.", "scenario": "A dashboard needs a 'Region' dropdown that updates 4 tiles consistently and should default to 'EMEA'.", "question": "What is the best approach?", "options": ["Hardcode WHERE region='EMEA' in every query", "Create a dashboard parameter 'region', set default to 'EMEA', and reference it in each tile query", "Ask users to duplicate the dashboard per region", "Use a notebook widget; dashboards cannot use parameters"], "answer": [1], "explanation": "Dashboard parameters can drive multiple tiles consistently and can have defaults like EMEA.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Choose the correct visualization for distribution + outliers.", "scenario": "You need to show the spread of delivery times with outliers across warehouses.", "question": "Which visualization is most appropriate?", "options": ["Pie chart", "Box plot", "Single-value KPI", "Stacked area chart"], "answer": [1], "explanation": "Box plots are suited to distributions and highlight quartiles and outliers.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Handle aggregated vs row-level data in charting.", "scenario": "A bar chart is showing one bar per transaction and is unreadable. You intended one bar per product category with total revenue.", "question": "What is the best fix?", "options": ["Increase the chart width", "Aggregate in SQL (GROUP BY category, SUM(revenue)) before visualizing", "Switch to a line chart", "Remove filters from the dashboard"], "answer": [1], "explanation": "Charts work best when the dataset matches the intended grain; aggregate in SQL to category level.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Multi-step: debug why a tile shows blank after applying a filter.", "scenario": "A dashboard has a date filter. One tile query uses WHERE event_date = {{date}} but event_date is DATE and the parameter is configured as string '2025-10-01'. The tile becomes blank.", "question": "What is the most likely fix?", "options": ["Cast the parameter to DATE in the query (e.g., event_date = to_date({{date}})) or configure the parameter as Date type", "Remove the WHERE clause and filter in the chart UI", "Turn off the SQL Warehouse cache", "Change event_date to STRING in the table"], "answer": [0], "explanation": "Type mismatch can cause no matches. Use typed date parameters or explicit casting to align types.", "multi": true, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Control dashboard refresh behavior for accuracy/cost.", "scenario": "An exec dashboard refreshes every 10 seconds and is burning warehouse compute. Data updates hourly.", "question": "What is the best change?", "options": ["Move the dashboard to a larger warehouse", "Reduce auto-refresh to match data latency (e.g., hourly) and/or use manual refresh", "Disable all parameters", "Convert visualizations to images"], "answer": [1], "explanation": "Align refresh frequency with data freshness needs to reduce unnecessary compute and cost.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Use query result reuse across tiles.", "scenario": "Multiple tiles reuse the same base dataset with different aggregations. You want maintainability and less duplication.", "question": "What is the best approach in Databricks SQL?", "options": ["Copy/paste the base SQL into each tile and hope for caching", "Create a view (or saved query) as the shared base and reference it from tile queries", "Export the dataset to CSV and chart from the CSV", "Use different warehouses per tile"], "answer": [1], "explanation": "Views/saved queries promote reuse, reduce duplication, and centralize logic changes.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Understand permissions required to view a dashboard correctly.", "scenario": "A user can open a shared dashboard but sees errors that tables are unauthorized.", "question": "What must be true?", "options": ["Dashboard share permissions automatically grant data permissions", "The user must have both dashboard permissions and underlying data object privileges in Unity Catalog (or use credential passthrough/appropriate access model)", "Only warehouse admin privileges are needed", "Granting CAN EDIT on the dashboard is sufficient"], "answer": [1], "explanation": "Dashboard access does not automatically grant access to underlying data. Users still need privileges to query the referenced tables/views.", "multi": false, "select_count": 1}, {"section": "Working with Dashboards and Visualisations in Databricks", "objective": "Multi-step: choose correct calc for a KPI with distinct counting.", "scenario": "You need 'Active Users' defined as distinct user_id with at least 1 event in the selected date range. An analyst uses COUNT(user_id).", "question": "What is the correct SQL aggregate and why?", "options": ["COUNT(user_id) because NULLs are ignored", "COUNT(DISTINCT user_id) because multiple events per user must be deduped", "SUM(user_id) because IDs are numeric", "APPROX_COUNT_DISTINCT is always exact"], "answer": [1], "explanation": "Active Users is a distinct-count metric; COUNT(DISTINCT ...) deduplicates users with multiple events. Approximate distinct is optional when trading accuracy for speed.", "multi": true, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Select the right content to ground Genie responses.", "scenario": "You build a Genie space for finance. The model must answer using only approved tables and definitions, and avoid drifting into unsupported data.", "question": "What is the best grounding setup?", "options": ["Let Genie crawl the entire workspace automatically for maximum context", "Attach curated tables/views and documented business definitions to the Genie space, limiting scope to governed sources", "Paste screenshots of dashboards into the prompt", "Disable Unity Catalog to reduce permission issues"], "answer": [1], "explanation": "Curating governed sources and definitions helps Genie stay grounded in approved data and reduces hallucination risk.", "multi": false, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Manage sharing while respecting least privilege.", "scenario": "A Genie space is used by multiple departments. Some users should ask questions but not modify instructions or attached data.", "question": "Which permission model best fits?", "options": ["Grant everyone CAN MANAGE so they can troubleshoot", "Grant most users view/use access, and restrict edit/manage permissions to space owners/maintainers", "Disable sharing; export answers to email", "Give everyone table OWNER privileges"], "answer": [1], "explanation": "Least privilege: most users should be able to use the space, while only maintainers can edit configuration and assets.", "multi": false, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Maintain correctness when underlying data changes.", "scenario": "A dimension table changed column names. Genie answers started failing or returning partial results.", "question": "What should you do first?", "options": ["Increase the token limit", "Update attached assets/semantic definitions in the Genie space to reflect new schema and validate queries", "Rebuild the SQL Warehouse", "Turn off caching"], "answer": [1], "explanation": "When schemas change, update the Genie space’s attached data/definitions and validate that generated queries still work.", "multi": false, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Multi-step: identify why two users get different Genie answers.", "scenario": "User A and User B ask the same question in the same Genie space. User A gets a full answer; User B gets 'insufficient permissions' and a partial response. Both can open the space.", "question": "What is the most likely reason?", "options": ["Genie randomizes answers by user to reduce bias", "Unity Catalog privileges differ; Genie respects the asking user’s data permissions, so B can’t access some tables/views", "The SQL Warehouse is down for B only", "User B’s browser blocks JavaScript"], "answer": [1], "explanation": "Genie operates within the user’s permissions. If UC privileges differ, accessible data differs, leading to different answers.", "multi": true, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Use monitoring/feedback loops to improve Genie reliability.", "scenario": "Stakeholders report that Genie sometimes chooses the wrong metric definition when multiple similar fields exist.", "question": "Which action is most effective?", "options": ["Remove all metric fields so Genie guesses", "Add explicit metric definitions/aliases in the space (semantic layer), and review conversation logs/feedback to refine instructions", "Switch everything to notebooks", "Disable permissions and let everyone access all tables"], "answer": [1], "explanation": "Clear metric definitions and iterative refinement using feedback/logs help reduce ambiguity and improve answer consistency.", "multi": false, "select_count": 1}, {"section": "Developing, Sharing, and Maintaining AI/BI Genie spaces", "objective": "Avoid leakage of sensitive data in natural-language answers.", "scenario": "Genie is attached to a table that contains PII, but only aggregated answers should be returned for most users.", "question": "What is the best control?", "options": ["Rely on users to not ask for PII", "Enforce column-level privileges and/or dynamic views/masking in Unity Catalog so most users cannot query PII columns", "Hide the PII column in the dashboard UI only", "Store PII in DBFS instead"], "answer": [1], "explanation": "Governance controls like column-level permissions, masking, and views enforce restrictions regardless of UI, preventing PII leakage.", "multi": false, "select_count": 1}, {"section": "Data Modelling with Databricks SQL", "objective": "Choose a star schema modeling decision.", "scenario": "You model sales: a large fact_sales and dimensions dim_date, dim_store, dim_product. Analysts often filter by date and product category.", "question": "Which is the best practice for the fact table?", "options": ["Store descriptive product attributes directly in the fact table to avoid joins", "Use surrogate keys to dimensions in the fact, keeping fact narrow and dimensions descriptive", "Normalize every attribute into separate facts", "Use arrays of dimension values inside the fact table"], "answer": [1], "explanation": "Star schema keeps fact tables narrow with keys, and stores descriptive attributes in dimensions for reuse and manageable updates.", "multi": false, "select_count": 1}, {"section": "Data Modelling with Databricks SQL", "objective": "Model slowly changing dimensions (SCD) for point-in-time reporting.", "scenario": "Product category can change over time. Reports must reflect the category as-of the sale date.", "question": "Which approach best supports this?", "options": ["Overwrite dim_product in place; history is unnecessary", "Implement SCD Type 2 (effective_start/end or current flag) and join on sale_date between effective ranges", "Store category only in fact_sales and never update it", "Use a temp view per report run"], "answer": [1], "explanation": "SCD Type 2 preserves historical dimension versions and enables as-of joins for point-in-time correctness.", "multi": false, "select_count": 1}, {"section": "Securing Data", "objective": "Grant least privilege to query a schema.", "scenario": "A team needs read-only access to all tables in catalog 'main', schema 'bi'. They should not create or modify objects.", "question": "Which is the best set of privileges?", "options": ["GRANT ALL PRIVILEGES ON CATALOG main TO team", "GRANT USAGE ON CATALOG main; GRANT USAGE ON SCHEMA main.bi; GRANT SELECT ON ALL TABLES IN SCHEMA main.bi", "GRANT CREATE TABLE ON SCHEMA main.bi; GRANT MODIFY ON ALL TABLES", "Make them workspace admins"], "answer": [1], "explanation": "USAGE allows visibility/namespace access; SELECT grants read on tables. Avoid create/modify/admin privileges.", "multi": false, "select_count": 1}, {"section": "Securing Data", "objective": "Control access to external locations.", "scenario": "You want to prevent analysts from reading raw files in a cloud bucket unless permitted, even if they know the path.", "question": "What should you enforce?", "options": ["Give analysts the cloud provider access keys", "Use Unity Catalog external locations + storage credentials and grant READ FILES only to authorized principals", "Mount the bucket to DBFS for everyone", "Disable SQL Warehouses"], "answer": [1], "explanation": "UC external locations and storage credentials centralize access and allow granular READ FILES privileges.", "multi": false, "select_count": 1}, {"section": "Securing Data", "objective": "Multi-step: diagnose permission error when querying a view.", "scenario": "A user has SELECT on a view v_sales but gets an error that they lack SELECT on the underlying table t_sales. The view owner has access to t_sales.", "question": "What is the most likely configuration issue?", "options": ["Views always run with definer rights; the user should never need table access", "The view is not configured to use owner/definer rights semantics (or the environment requires the caller to have underlying privileges), so grant needed privileges or adjust the view/access model", "The SQL Warehouse is too small", "The user must be cluster admin"], "answer": [1], "explanation": "Depending on configuration and object types, the caller may still need access to underlying objects. Fix by granting privileges appropriately or using an access pattern that supports intended privilege behavior.", "multi": true, "select_count": 1}, {"section": "Securing Data", "objective": "Audit who queried sensitive tables.", "scenario": "Security requests a report of who accessed a sensitive table last week and from which queries/jobs.", "question": "What should you use?", "options": ["Notebook revision history", "Unity Catalog audit logs / system tables for access events", "OPTIMIZE history", "Dashboard edit history only"], "answer": [1], "explanation": "UC auditing (often via audit logs/system tables) captures access events for governed objects, supporting compliance reporting.", "multi": false, "select_count": 1}];
+
+  // --- state ---
+  const state = {
+    idx: 0,
+    answers: Array.from({length: QUESTIONS.length}, () => []),
+    flagged: Array.from({length: QUESTIONS.length}, () => false),
+    startEpoch: null,
+    submitted: false,
+    reveal: Array.from({length: QUESTIONS.length}, () => false),
+  };
+
+  const el = (id) => document.getElementById(id);
+
+  const navgrid = el("navgrid");
+  const pillAnswered = el("pillAnswered");
+  const pillFlagged = el("pillFlagged");
+  const pillTimer = el("pillTimer");
+  const pillCurrent = el("pillCurrent");
+  const pillTotal = el("pillTotal");
+  const pillMulti = el("pillMulti");
+
+  const badgeNum = el("badgeNum");
+  const badgeType = el("badgeType");
+  const sectionline = el("sectionline");
+  const objective = el("objective");
+  const prompt = el("prompt");
+  const options = el("options");
+
+  const btnPrev = el("btnPrev");
+  const btnNext = el("btnNext");
+  const btnFlag = el("btnFlag");
+  const btnSubmit = el("btnSubmit");
+  const btnReset = el("btnReset");
+  const btnReveal = el("btnReveal");
+
+  const explain = el("explain");
+  const explainHead = el("explainHead");
+  const explainBody = el("explainBody");
+
+  const result = el("result");
+  const score = el("score");
+  const scoreSub = el("scoreSub");
+  const breakdown = el("breakdown").querySelector("tbody");
+  const btnReview = el("btnReview");
+  const btnReset2 = el("btnReset2");
+
+  const bannerErr = el("bannerErr");
+
+  function safe(fn) {
+    try { fn(); }
+    catch (e) {
+      console.error(e);
+      bannerErr.style.display = "block";
+    }
+  }
+
+  function fmtTime(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    const m = String(Math.floor(sec / 60)).padStart(2, "0");
+    const s = String(sec % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  }
+
+  function now() { return Math.floor(Date.now()/1000); }
+
+  function save() {
+    const payload = {
+      ...state,
+      // store epoch in seconds
+      _savedAt: now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  }
+
+  function load() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    try {
+      const p = JSON.parse(raw);
+      if (!p || !Array.isArray(p.answers) || p.answers.length !== QUESTIONS.length) return false;
+      Object.assign(state, {
+        idx: p.idx ?? 0,
+        answers: p.answers,
+        flagged: p.flagged ?? state.flagged,
+        startEpoch: p.startEpoch ?? null,
+        submitted: p.submitted ?? false,
+        reveal: p.reveal ?? state.reveal,
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function resetAttempt() {
+    localStorage.removeItem(STORAGE_KEY);
+    state.idx = 0;
+    state.answers = Array.from({length: QUESTIONS.length}, () => []);
+    state.flagged = Array.from({length: QUESTIONS.length}, () => false);
+    state.startEpoch = now();
+    state.submitted = false;
+    state.reveal = Array.from({length: QUESTIONS.length}, () => false);
+    save();
+    renderAll();
+  }
+
+  function answeredCount() {
+    return state.answers.filter(a => a && a.length>0).length;
+  }
+  function flaggedCount() {
+    return state.flagged.filter(Boolean).length;
+  }
+
+  function buildNav() {
+    navgrid.innerHTML = "";
+    QUESTIONS.forEach((q, i) => {
+      const b = document.createElement("button");
+      b.className = "qbtn";
+      b.type = "button";
+      b.textContent = String(i+1);
+      b.addEventListener("click", () => {
+        if (state.submitted) return;
+        state.idx = i;
+        save();
+        renderQuestion();
+        renderNavStyles();
+      });
+      navgrid.appendChild(b);
+    });
+  }
+
+  function renderNavStyles() {
+    [...navgrid.children].forEach((b, i) => {
+      b.classList.toggle("active", i === state.idx);
+      b.classList.toggle("answered", state.answers[i]?.length>0);
+      b.classList.toggle("flagged", !!state.flagged[i]);
+    });
+  }
+
+  function renderPills() {
+    pillAnswered.textContent = String(answeredCount());
+    pillFlagged.textContent = String(flaggedCount());
+    pillCurrent.textContent = String(state.idx+1);
+    pillTotal.textContent = String(QUESTIONS.length);
+    pillMulti.textContent = String(QUESTIONS.filter(q=>q.multi).length);
+  }
+
+  function renderQuestion() {
+    const q = QUESTIONS[state.idx];
+    badgeNum.innerHTML = `<span class="dot"></span> Q${state.idx+1}`;
+    badgeType.classList.toggle("multi", !!q.multi);
+    badgeType.innerHTML = q.select_count>1
+      ? `<span class="dot"></span> Multi-select (choose ${q.select_count})`
+      : (q.multi ? `<span class="dot"></span> Single-select • Multi-step` : `<span class="dot"></span> Single-select`);
+
+    sectionline.textContent = `Domain: ${q.section}`;
+    objective.textContent = `Objective: ${q.objective}`;
+
+    const scenarioTxt = q.scenario ? `Scenario: ${q.scenario}\n\n` : "";
+    prompt.textContent = `${scenarioTxt}Question: ${q.question}`;
+
+    options.innerHTML = "";
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const current = new Set(state.answers[state.idx] || []);
+    q.options.forEach((opt, oi) => {
+      const lab = document.createElement("label");
+      lab.className = "opt";
+      const input = document.createElement("input");
+      input.type = (q.select_count>1) ? "checkbox" : "radio";
+      input.name = "opt";
+      input.value = String(oi);
+      input.checked = current.has(oi);
+      input.disabled = state.submitted;
+
+      input.addEventListener("change", () => {
+        if (state.submitted) return;
+        const chosen = new Set(state.answers[state.idx] || []);
+        if (q.select_count>1) {
+          if (input.checked) chosen.add(oi); else chosen.delete(oi);
+          // enforce max selections
+          if (chosen.size > q.select_count) {
+            // undo newest check
+            input.checked = false;
+            chosen.delete(oi);
+            return;
+          }
+        } else {
+          chosen.clear();
+          chosen.add(oi);
+        }
+        state.answers[state.idx] = [...chosen];
+        save();
+        renderPills();
+        renderNavStyles();
+      });
+
+      const letter = document.createElement("div");
+      letter.className = "letter";
+      letter.textContent = letters[oi] || "?";
+
+      const txt = document.createElement("div");
+      txt.className = "txt";
+      txt.textContent = opt;
+
+      lab.appendChild(input);
+      lab.appendChild(letter);
+      lab.appendChild(txt);
+      options.appendChild(lab);
+    });
+
+    // explanation
+    explain.style.display = state.reveal[state.idx] || state.submitted ? "block" : "none";
+    const correct = new Set(q.answer);
+    const chosen = new Set(state.answers[state.idx] || []);
+    const isCorrect = chosen.size===correct.size && [...chosen].every(x=>correct.has(x));
+
+    let head = "";
+    if (state.submitted || state.reveal[state.idx]) {
+      if (chosen.size===0) head = `<b class="muted">Not answered</b>`;
+      else head = isCorrect ? `<b class="good">Correct</b>` : `<b class="bad">Incorrect</b>`;
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+      const corrLbl = q.answer.map(i=>letters[i]).join(", ");
+      head += `<span class="badge" style="margin-left:6px"><span class="dot"></span> Correct: ${corrLbl}</span>`;
+    }
+    explainHead.innerHTML = head;
+    explainBody.textContent = q.explanation || "";
+  }
+
+  function renderButtons() {
+    btnPrev.disabled = state.idx===0 || state.submitted;
+    btnNext.disabled = state.idx===QUESTIONS.length-1 || state.submitted;
+    btnFlag.textContent = state.flagged[state.idx] ? "Unflag" : "Flag";
+    btnReveal.disabled = state.submitted;
+    btnReveal.textContent = state.reveal[state.idx] ? "Explanation shown" : "Reveal explanation";
+  }
+
+  function renderResult() {
+    if (!state.submitted) {
+      result.style.display = "none";
+      return;
+    }
+    result.style.display = "block";
+
+    let correctTotal = 0;
+    let answered = 0;
+
+    const bySection = {};
+    QUESTIONS.forEach((q, i) => {
+      const sec = q.section;
+      bySection[sec] = bySection[sec] || {total:0, answered:0, correct:0};
+      bySection[sec].total += 1;
+
+      const chosen = new Set(state.answers[i] || []);
+      if (chosen.size>0) {
+        bySection[sec].answered += 1;
+        answered += 1;
+      }
+      const corr = new Set(q.answer);
+      const ok = chosen.size===corr.size && [...chosen].every(x=>corr.has(x));
+      if (ok) {
+        bySection[sec].correct += 1;
+        correctTotal += 1;
+      }
+    });
+
+    const pct = Math.round((correctTotal/QUESTIONS.length)*100);
+    score.textContent = `${correctTotal} / ${QUESTIONS.length} (${pct}%)`;
+    scoreSub.textContent = `Answered ${answered} of ${QUESTIONS.length} questions.`;
+
+    breakdown.innerHTML = "";
+    Object.keys(bySection).sort().forEach(sec => {
+      const r = bySection[sec];
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${sec}</td><td>${r.correct}</td><td>${r.answered}</td><td>${r.total}</td>`;
+      breakdown.appendChild(tr);
+    });
+  }
+
+  function renderAll() {
+    renderPills();
+    renderNavStyles();
+    renderQuestion();
+    renderButtons();
+    renderResult();
+  }
+
+  function tick() {
+    if (!state.startEpoch) state.startEpoch = now();
+    const elapsed = now() - state.startEpoch;
+    const left = DURATION_SEC - elapsed;
+    pillTimer.textContent = fmtTime(left);
+    if (!state.submitted && left<=0) {
+      submit();
+    }
+  }
+
+  function submit() {
+    state.submitted = true;
+    // show explanations for all questions in review
+    state.reveal = state.reveal.map(_ => true);
+    save();
+    renderAll();
+    // jump to result view (scroll)
+    document.getElementById("result").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  // --- events ---
+  btnPrev.addEventListener("click", () => safe(() => {
+    if (state.submitted) return;
+    state.idx = Math.max(0, state.idx-1);
+    save();
+    renderAll();
+  }));
+
+  btnNext.addEventListener("click", () => safe(() => {
+    if (state.submitted) return;
+    state.idx = Math.min(QUESTIONS.length-1, state.idx+1);
+    save();
+    renderAll();
+  }));
+
+  btnFlag.addEventListener("click", () => safe(() => {
+    if (state.submitted) return;
+    state.flagged[state.idx] = !state.flagged[state.idx];
+    save();
+    renderPills();
+    renderNavStyles();
+    renderButtons();
+  }));
+
+  btnReveal.addEventListener("click", () => safe(() => {
+    if (state.submitted) return;
+    state.reveal[state.idx] = true;
+    save();
+    renderQuestion();
+    renderButtons();
+  }));
+
+  btnSubmit.addEventListener("click", () => safe(() => {
+    if (state.submitted) return;
+    submit();
+  }));
+
+  btnReset.addEventListener("click", () => safe(() => {
+    if (!confirm("Reset this attempt? This clears saved answers for this exam set.")) return;
+    resetAttempt();
+  }));
+
+  btnReset2.addEventListener("click", () => safe(() => {
+    if (!confirm("Reset this attempt?")) return;
+    resetAttempt();
+  }));
+
+  btnReview.addEventListener("click", () => safe(() => {
+    // just hide the result block and keep review mode
+    result.style.display = "none";
+    state.idx = 0;
+    save();
+    renderAll();
+  }));
+
+  window.addEventListener("keydown", (e) => safe(() => {
+    if (e.target && ["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) return;
+    if (e.key === "ArrowLeft") btnPrev.click();
+    if (e.key === "ArrowRight") btnNext.click();
+    if (e.key.toLowerCase() === "f") btnFlag.click();
+    if (e.key.toLowerCase() === "s") btnSubmit.click();
+  }));
+
+  // --- init ---
+  safe(() => {
+    const loaded = load();
+    if (!loaded || !state.startEpoch) state.startEpoch = now();
+    buildNav();
+    renderAll();
+    tick();
+    setInterval(() => safe(tick), 500);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Databricks Certified Data Analyst Associate — Hard Mock Exam (50Q)</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a33;
+      --panel2: #0f1730;
+      --text: #e8ecff;
+      --muted: #aeb7e6;
+      --accent: #7aa2ff;
+      --good: #49d17d;
+      --bad: #ff5f6d;
+      --warn: #ffcc66;
+      --border: rgba(255,255,255,0.10);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% 0%, rgba(122,162,255,0.18), transparent 60%),
+                  radial-gradient(900px 700px at 90% 10%, rgba(73,209,125,0.10), transparent 55%),
+                  var(--bg);
+    }
+    a { color: var(--accent); }
+    .app {
+      max-width: 1120px;
+      margin: 24px auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .cardHeader {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.12);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .title {
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(0,0,0,0.10);
+    }
+    .timer {
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
+    }
+    .cardBody { padding: 16px; }
+    .muted { color: var(--muted); }
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(122,162,255,0.14);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 650;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btnGhost {
+      background: rgba(255,255,255,0.06);
+    }
+    .btnDanger {
+      background: rgba(255,95,109,0.16);
+    }
+    .btnGood {
+      background: rgba(73,209,125,0.15);
+    }
+    .qNav {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+    .qBtn {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 10px 0;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.10);
+      color: var(--text);
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      text-align: center;
+    }
+    .qBtn:hover { filter: brightness(1.1); }
+    .qBtn.current { outline: 2px solid rgba(122,162,255,0.55); }
+    .qBtn.answered { background: rgba(73,209,125,0.12); }
+    .qBtn.flagged::after {
+      content: "⚑";
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 12px;
+      color: var(--warn);
+    }
+    .qMeta {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .qMeta .line {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .k {
+      font-size: 12px;
+      font-family: var(--mono);
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .stem {
+      white-space: pre-wrap;
+      line-height: 1.45;
+      margin: 10px 0 14px;
+    }
+    .objective {
+      font-size: 13px;
+      line-height: 1.35;
+      color: var(--muted);
+      border-left: 3px solid rgba(122,162,255,0.55);
+      padding-left: 10px;
+      white-space: pre-wrap;
+    }
+    .options {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    label.option {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.12);
+      cursor: pointer;
+    }
+    label.option:hover { filter: brightness(1.06); }
+    .letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .explain {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.12);
+    }
+    .scoreBox {
+      display: grid;
+      gap: 10px;
+    }
+    .big {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .bar > div {
+      height: 100%;
+      width: 0%;
+      background: rgba(122,162,255,0.7);
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .table th, .table td {
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      padding: 8px 6px;
+      text-align: left;
+      color: var(--muted);
+    }
+    .table th { color: var(--text); font-weight: 700; }
+    .badgeGood { color: var(--good); font-weight: 700; }
+    .badgeBad { color: var(--bad); font-weight: 700; }
+    .footerNote {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 10px;
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: Nav / Controls -->
+    <div class="card" id="leftCard">
+      <div class="cardHeader">
+        <div class="title">
+          Mock Exam
+          <span class="pill">50 questions</span>
+          <span class="pill">90 min</span>
+        </div>
+        <div class="timer" id="timer">⏱ 90:00</div>
+      </div>
+      <div class="cardBody">
+        <div class="muted" style="margin-bottom:10px;">
+          Tip: Use <span class="k">Flag</span> to mark questions to revisit.
+        </div>
+
+        <div class="qNav" id="qNav" aria-label="Question navigation"></div>
+
+        <div class="btnRow">
+          <button class="btnGhost" id="startBtn">Start / Resume</button>
+          <button class="btnGhost" id="flagBtn">Flag</button>
+          <button class="btnDanger" id="resetBtn" title="Clears all answers (local only)">Reset</button>
+        </div>
+
+        <div class="btnRow">
+          <button class="btnGhost" id="prevBtn">← Prev</button>
+          <button class="btnGhost" id="nextBtn">Next →</button>
+          <button class="btnGood" id="submitBtn">Submit</button>
+        </div>
+
+        <div class="footerNote">
+          This is a practice app. Your selections are saved in your browser (localStorage).
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Question / Results -->
+    <div class="card" id="mainCard">
+      <div class="cardHeader">
+        <div class="title" id="mainTitle">Databricks Certified Data Analyst Associate — Mock Exam</div>
+        <span class="pill" id="progressPill">0 / 45 answered</span>
+      </div>
+      <div class="cardBody" id="mainBody">
+        <div class="muted" style="line-height:1.55;">
+          Click <b>Start / Resume</b> to begin. You can navigate freely. When you’re ready, hit <b>Submit</b> to get your score + a section breakdown.
+          <br/><br/>
+          Question format follows the sample items in the official exam guide (objective → scenario → multiple-choice). 
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// localStorage key for autosave/resume
+const STORAGE_KEY = "dbx_da_hard_mock_exam_50q_v1";
+const QUESTIONS = [{"id": 1, "section": "1. Understanding Platform", "objective": "Understand catalogs, schemas, managed and external tables, access controls, certified tables, and lineage within Catalog Explorer.", "stem": "You are reviewing a dataset in Catalog Explorer and notice it has a “Certified” badge. A stakeholder asks what that badge practically implies.", "question": "Which statement best describes a Certified table in Databricks?", "options": {"A": "It is automatically encrypted with customer-managed keys (CMK).", "B": "It has passed an organization-defined quality/governance process and is promoted as trusted for consumption.", "C": "It is a managed table stored only in the DBFS root.", "D": "It is a materialized view maintained by a SQL Warehouse."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Certification indicates a table has been endorsed as trusted/approved per governance processes; it is not a storage type or encryption mechanism."}, {"id": 2, "section": "1. Understanding Platform", "objective": "Describe the role and features of Databricks Marketplace.", "stem": "Your org wants analysts to quickly access third‑party demographic datasets without building ingestion pipelines from scratch.", "question": "Which Databricks feature is designed for discovering and acquiring external datasets directly into the platform?", "options": {"A": "Catalog Explorer lineage graph", "B": "Databricks Marketplace", "C": "Lakeflow Jobs", "D": "Photon"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Marketplace is the built-in discovery and acquisition experience for data/AI assets from providers."}, {"id": 3, "section": "1. Understanding Platform", "objective": "Describe the core components of the Databricks Data Intelligence Platform, including Delta Lake, Unity Catalog, and Databricks SQL.", "stem": "A teammate claims Delta Lake and Unity Catalog are interchangeable because “both store tables.” You want to correct them precisely.", "question": "Which pairing is correct?", "options": {"A": "Delta Lake = governance layer; Unity Catalog = storage format", "B": "Delta Lake = storage/transaction layer; Unity Catalog = governance/metadata + permissions", "C": "Delta Lake = compute engine; Unity Catalog = SQL editor", "D": "Delta Lake = dashboarding; Unity Catalog = visualization"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Delta Lake provides ACID/transactional storage on data lake files; Unity Catalog provides centralized governance/metadata and access control."}, {"id": 4, "section": "1. Understanding Platform", "objective": "Describe the role a SQL Warehouse plays in query execution.", "stem": "An analyst asks why the same SQL query runs in the SQL Editor even when no interactive cluster is attached.", "question": "What is the most accurate explanation?", "options": {"A": "SQL Editor automatically runs on a serverless Python cluster.", "B": "SQL queries in Databricks SQL are executed by a SQL Warehouse (serverless or classic) that provides the compute.", "C": "All SQL queries are executed directly in Delta Lake without compute.", "D": "SQL Editor only runs cached results; it never executes compute."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "A SQL Warehouse is the compute resource for Databricks SQL query execution."}, {"id": 5, "section": "1. Understanding Platform", "objective": "Understand catalogs, schemas, managed and external tables.", "stem": "You create a table with a LOCATION pointing to an existing path in cloud storage and later drop the table definition.", "question": "Which outcome is expected for an external table?", "options": {"A": "Data files are deleted when the table is dropped.", "B": "Only metadata is removed; underlying files remain at the external location.", "C": "The table becomes a managed table automatically.", "D": "The table cannot be queried by SQL Warehouses."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "External tables keep data at an external location; dropping the table removes metadata, not the underlying files."}, {"id": 6, "section": "1. Understanding Platform", "objective": "Understand lineage within the Catalog Explorer interface.", "stem": "A compliance reviewer needs to confirm which downstream dashboards consume a particular PII column.", "question": "Where would you primarily look to trace downstream usage inside Databricks?", "options": {"A": "Cluster event logs", "B": "Catalog Explorer lineage", "C": "Auto Loader schema inference", "D": "Delta Sharing recipient settings"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Catalog Explorer lineage helps trace upstream/downstream dependencies for tables/views and related assets."}, {"id": 7, "section": "2. Managing Data", "objective": "Use Unity Catalog to discover, query, and manage certified datasets.", "stem": "Your workspace has multiple catalogs and schemas. You need to quickly filter to only datasets that are certified and owned by your team.", "question": "Which approach best matches the goal in Catalog Explorer?", "options": {"A": "Use the Query Profiler to filter tables by owner and certification.", "B": "Use Catalog Explorer filters (e.g., certification/owner tags) to narrow visible assets.", "C": "Run DESCRIBE HISTORY on every table and search for 'certified'.", "D": "Create a dashboard that lists tables and manually mark them."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Catalog Explorer provides search and filters for governance attributes like certification, tags, and ownership."}, {"id": 8, "section": "2. Managing Data", "objective": "Perform data cleaning in SQL, including removing invalid data or handling missing values.", "stem": "You’re standardizing a customer table. The column country_code sometimes contains empty strings and sometimes NULL. Downstream joins treat them differently.", "question": "Which SQL transformation is the most robust to normalize both cases to NULL?", "options": {"A": "COALESCE(country_code, '')", "B": "NULLIF(TRIM(country_code), '')", "C": "NVL2(country_code, country_code, 'UNKNOWN')", "D": "IFNULL(country_code, ' ')"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "TRIM then NULLIF converts empty/whitespace-only strings to NULL while preserving valid values."}, {"id": 9, "section": "2. Managing Data", "objective": "Use the Catalog Explorer to tag a data asset and view its lineage.", "stem": "A dataset is approved for use in finance reporting. You want users to discover it easily and understand the approval context.", "question": "What should you do in addition to certifying the table?", "options": {"A": "Attach the table to a new cluster policy.", "B": "Add descriptive tags and documentation/comments in Catalog Explorer.", "C": "Convert it into a streaming table.", "D": "Disable query caching for the table."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Tags and documentation improve discoverability and provide context for governance/usage."}, {"id": 10, "section": "2. Managing Data", "objective": "Perform data cleaning in SQL, including removing invalid data.", "stem": "You have a numeric column total_amount that sometimes contains negative values due to refunds. For a specific KPI, negatives must be excluded but refunds must still be traceable.", "question": "Which is the best approach?", "options": {"A": "DELETE all rows where total_amount < 0.", "B": "Filter total_amount >= 0 in the KPI query, and keep the source data unchanged.", "C": "Overwrite the table setting all negatives to 0.", "D": "Convert the column to STRING so negatives aren’t treated as numbers."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "For analytic KPIs, filter at query time (or create a curated view) rather than destroying/overwriting raw records needed for audit."}, {"id": 11, "section": "3. Importing Data", "objective": "Use the Databricks Workspace UI to upload a data file to the platform.", "stem": "A teammate uploads a CSV via the Workspace UI and asks where it can be queried from Databricks SQL without writing ingestion code.", "question": "Which statement is most accurate?", "options": {"A": "UI upload always creates a Delta table automatically in Unity Catalog.", "B": "UI upload places the file in workspace-managed storage; you typically still need to create a table (or use a UI import flow) to query it in SQL.", "C": "UI upload can only be accessed from Python notebooks, not SQL.", "D": "UI upload is the same as Delta Sharing."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Uploading a file does not inherently create a governed SQL table; you generally create/import a table from the file to query reliably."}, {"id": 12, "section": "3. Importing Data", "objective": "Explain approaches for bringing data into Databricks, including Auto Loader and Delta Sharing.", "stem": "You need near-real-time ingestion of JSON files arriving continuously in cloud object storage, with schema evolution handled safely.", "question": "Which ingestion approach is most appropriate?", "options": {"A": "Delta Sharing", "B": "Auto Loader", "C": "Databricks Marketplace", "D": "Query caching"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Auto Loader is designed for incremental file ingestion from object storage with scalable discovery and schema evolution options."}, {"id": 13, "section": "4. Executing Queries", "objective": "Create a materialized view and differentiate between dynamic and materialized views.", "stem": "You have a heavy aggregation used by many dashboards. Data updates hourly, and you want fast, consistent reads with scheduled refresh.", "question": "Which object best fits?", "options": {"A": "Temporary view", "B": "Dynamic view", "C": "Materialized view", "D": "CTE (WITH clause)"}, "correct": ["C"], "multi": false, "multiStep": false, "explanation": "Materialized views persist computed results and can be refreshed, improving performance for repeated reads."}, {"id": 14, "section": "4. Executing Queries", "objective": "Write queries to combine tables using join operations with multiple keys.", "stem": "Two tables (orders o, order_items i) share keys (order_id, order_date). Some late-arriving items have matching order_id but different order_date due to corrections.", "question": "Which join condition is safest to prevent accidental mismatches?", "options": {"A": "ON o.order_id = i.order_id", "B": "ON o.order_id = i.order_id AND o.order_date = i.order_date", "C": "USING (order_date)", "D": "NATURAL JOIN"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Join on the full business key (multiple columns) to avoid incorrect matches when one key alone is insufficient."}, {"id": 15, "section": "4. Executing Queries", "objective": "Perform sorting and filtering operations on a table.", "stem": "You need the top 3 products per category by revenue, with ties broken by product_id ascending.", "question": "Which SQL pattern is most appropriate?", "options": {"A": "ORDER BY category, revenue DESC LIMIT 3", "B": "QUALIFY ROW_NUMBER() OVER (PARTITION BY category ORDER BY revenue DESC, product_id ASC) <= 3", "C": "GROUP BY category HAVING revenue IN (SELECT MAX(revenue) ...)", "D": "DISTRIBUTE BY category SORT BY revenue"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Window functions with QUALIFY (or a subquery) are the standard way to get top-N per group with deterministic tie-breaking."}, {"id": 16, "section": "4. Executing Queries", "objective": "Perform aggregate operations such as approximate count distinct.", "stem": "You’re calculating daily active users for billions of events where exact distinct counting is too slow and expensive.", "question": "Which function best fits?", "options": {"A": "COUNT(user_id)", "B": "COUNT(DISTINCT user_id)", "C": "APPROX_COUNT_DISTINCT(user_id)", "D": "SUM(DISTINCT user_id)"}, "correct": ["C"], "multi": false, "multiStep": false, "explanation": "Approximate distinct uses probabilistic algorithms to trade tiny accuracy loss for major performance gains."}, {"id": 17, "section": "4. Executing Queries", "objective": "Querying cross-system analytics by joining Delta with a federated data source.", "stem": "A query joins a large Delta fact table with a small dimension table from a federated source. Performance is poor due to repeated remote scans.", "question": "What’s the best first move to improve performance while keeping logic equivalent?", "options": {"A": "Force a CROSS JOIN then filter later.", "B": "Materialize/ingest the small remote dimension into Delta (or cache it) before joining repeatedly.", "C": "Disable Photon.", "D": "Replace the join with UNION ALL."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Repeated joins to remote sources can be expensive; ingesting/materializing the small dimension locally (or caching) reduces remote I/O."}, {"id": 18, "section": "4. Executing Queries", "objective": "Utilize Databricks Assistant to facilitate query writing and debugging.", "stem": "You ask Databricks Assistant to generate a query, but it returns an error due to an ambiguous column reference after a join.", "question": "What’s the best prompt refinement to fix it quickly?", "options": {"A": "“Make it shorter.”", "B": "“Use SELECT *.”", "C": "“Qualify all column references with table aliases and regenerate the query.”", "D": "“Turn off ANSI mode.”"}, "correct": ["C"], "multi": false, "multiStep": false, "explanation": "Ambiguity is resolved by qualifying columns with aliases; prompting for explicit qualification is effective."}, {"id": 19, "section": "4. Executing Queries", "objective": "Use Delta Lake time travel to access and query historical data versions.", "stem": "A dashboard suddenly shows a spike. You suspect yesterday’s pipeline write introduced duplication. You need to compare today’s table with its state 24 hours ago.", "question": "Which approach is most appropriate?", "options": {"A": "DESCRIBE DETAIL table to see file sizes only", "B": "Query the table using a VERSION AS OF or TIMESTAMP AS OF clause (time travel)", "C": "VACUUM the table to remove duplicates", "D": "OPTIMIZE ZORDER to re-cluster data"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Delta time travel enables querying historical snapshots by version or timestamp for validation/comparison."}, {"id": 20, "section": "4. Executing Queries", "objective": "Create managed and external tables, including creating tables by joining data from multiple sources.", "stem": "You need to create a curated Delta table by joining a CSV landing table and an existing Delta table, ensuring results are governed in Unity Catalog.", "question": "Which statement is most accurate?", "options": {"A": "You cannot create a Delta table from multiple sources in one statement.", "B": "CREATE TABLE ... AS SELECT (CTAS) can build a new table from a query that joins multiple sources.", "C": "Only notebooks can create tables; SQL Editor cannot.", "D": "CTAS always creates an external table."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "CTAS creates a table from a SELECT query (including joins across sources) and is commonly used for curated datasets."}, {"id": 21, "section": "4. Executing Queries", "objective": "Write queries to combine tables using set operations like UNION and UNION ALL.", "stem": "You are merging two event streams. Duplicates are expected and must be preserved for accurate counts.", "question": "Which is correct?", "options": {"A": "Use UNION because it keeps duplicates.", "B": "Use UNION ALL because it keeps duplicates.", "C": "Use INTERSECT to keep duplicates.", "D": "Use EXCEPT to keep duplicates."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "UNION removes duplicates; UNION ALL preserves them."}, {"id": 22, "section": "4. Executing Queries", "objective": "Fix a query to achieve the desired results.", "stem": "You need a query that returns only customers who placed orders in both 2024 and 2025. Current query returns customers who ordered in either year.\n\nCurrent query:\nSELECT customer_id FROM orders WHERE year IN (2024,2025) GROUP BY customer_id HAVING COUNT(*)>0;", "question": "Which fix produces the correct logic?", "options": {"A": "HAVING COUNT(DISTINCT year)=2", "B": "HAVING MIN(year)=2024 AND MAX(year)=2025", "C": "WHERE year=2024 OR 2025", "D": "Remove GROUP BY"}, "correct": ["A"], "multi": false, "multiStep": true, "explanation": "Counting distinct years ensures the customer appears in both years (2 distinct values)."}, {"id": 23, "section": "5. Analyzing Queries", "objective": "Understand the features, benefits, and supported workloads of Photon.", "stem": "A team is deciding whether Photon will help their workload. They run a mix of SQL patterns and want to know where Photon typically provides acceleration.", "question": "Which workloads are commonly accelerated by Photon? (Select all that apply.)", "options": {"A": "Analytical SQL with large scans, joins, and aggregations", "B": "Vectorized execution of many SQL operators in Databricks SQL", "C": "Unity Catalog permission checks and grants", "D": "Pure UI rendering of dashboards", "E": "Some ETL-style SQL transformations that translate to supported operators"}, "correct": ["A", "B", "E"], "multi": true, "multiStep": false, "explanation": "Photon is a native/vectorized engine that accelerates many SQL operators (scans/joins/aggs and many transformations). It does not replace governance or UI rendering."}, {"id": 24, "section": "5. Analyzing Queries", "objective": "Identify poorly performing queries using Query Insights / Query Profiler.", "stem": "A query’s runtime doubled after adding a new filter predicate. Query history shows the same input size, but the plan indicates a full table scan.", "question": "What’s the most likely root cause to investigate first?", "options": {"A": "The filter predicate is non-sargable (e.g., wraps the column in a function), preventing data skipping/clustering benefits.", "B": "The query is missing a SELECT clause.", "C": "The SQL Warehouse is too small to run any query.", "D": "The table is not in Unity Catalog."}, "correct": ["A"], "multi": false, "multiStep": false, "explanation": "Functions around filter columns can prevent predicate pushdown/data skipping; check the profiler for scan vs. filter placement."}, {"id": 25, "section": "5. Analyzing Queries", "objective": "Utilize Delta Lake to audit and view history, validate results, and compare trends.", "stem": "You need to confirm exactly which operation introduced a schema change and who executed it.", "question": "Which command helps most directly?", "options": {"A": "DESCRIBE HISTORY <table>", "B": "SHOW CREATE TABLE <table>", "C": "DESCRIBE EXTENDED <table>", "D": "REFRESH TABLE <table>"}, "correct": ["A"], "multi": false, "multiStep": false, "explanation": "DESCRIBE HISTORY returns Delta transaction history including operation type, user, timestamp, and metrics."}, {"id": 26, "section": "5. Analyzing Queries", "objective": "Utilize query history and caching to reduce development time and query latency.", "stem": "A dashboard has a parameterized query that runs every minute with the same parameter values for most users. You see repeated identical statements in query history.", "question": "What’s the best optimization to try first (without changing results)?", "options": {"A": "Disable result caching so every user gets fresh compute.", "B": "Leverage result caching by ensuring the query is deterministic and uses the same warehouse/context; avoid non-deterministic functions.", "C": "Rewrite as a CROSS JOIN.", "D": "Convert the query into a Python UDF."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Result caching can speed up repeated identical queries; non-deterministic functions can prevent cache hits."}, {"id": 27, "section": "5. Analyzing Queries", "objective": "Apply Liquid Clustering to improve query speed when filtering large tables on specific columns.", "stem": "A 5 TB Delta table is frequently filtered by customer_id and event_date. You want to reduce scan cost while supporting evolving query patterns.", "question": "Which approach best fits Liquid Clustering’s intent?", "options": {"A": "Create a VIEW and hope the optimizer skips files.", "B": "Apply Liquid Clustering on customer_id, event_date to improve pruning for common filters without rigid partitioning.", "C": "Always partition by every column used in any filter.", "D": "Disable statistics collection."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Liquid Clustering aims to improve data skipping/pruning on large tables for common filter columns without over-partitioning."}, {"id": 28, "section": "5. Analyzing Queries", "objective": "Fix a query to achieve desired results by analyzing logic errors.", "stem": "A query intended to return the latest order per customer returns multiple rows per customer.\n\nQuery:\nSELECT * FROM orders o\nWHERE o.order_ts = (SELECT MAX(order_ts) FROM orders);", "question": "What is the best fix?", "options": {"A": "Add DISTINCT to SELECT *", "B": "Correlate the subquery by customer_id (or use a window function) to get MAX per customer", "C": "Replace MAX with MIN", "D": "Add ORDER BY order_ts DESC LIMIT 1"}, "correct": ["B"], "multi": false, "multiStep": true, "explanation": "The subquery currently finds the global max; correlate by customer (or window) to get per-customer latest order."}, {"id": 29, "section": "5. Analyzing Queries", "objective": "Identify poorly performing queries and interpret profiler signals.", "stem": "Query Profiler shows a skewed join where one partition is 20x larger than others, causing long tail tasks.", "question": "Which mitigation is typically most appropriate?", "options": {"A": "Increase dashboard refresh frequency.", "B": "Consider join reordering, salting/skew hints, or broadcasting the small table if applicable.", "C": "Replace INNER JOIN with FULL OUTER JOIN.", "D": "Turn off Delta Lake."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Skew mitigation often involves broadcasting small dimensions, adjusting join strategy, or addressing skew keys."}, {"id": 30, "section": "5. Analyzing Queries", "objective": "Utilize Delta Lake to compare historical results or trends.", "stem": "You want to quantify how many rows changed between version 120 and 121 of a Delta table after a MERGE.", "question": "Which approach is most appropriate?", "options": {"A": "Compare snapshots using time travel and compute EXCEPT/anti-joins between versions.", "B": "Run VACUUM to find changed rows.", "C": "Drop the table and re-create it.", "D": "Use OPTIMIZE to list differences."}, "correct": ["A"], "multi": false, "multiStep": true, "explanation": "Time travel enables snapshot comparison; set difference/anti-joins can quantify changes."}, {"id": 31, "section": "6. Dashboards & Visualizations", "objective": "Build dashboards using AI/BI Dashboards, including multiple tabs/pages and widgets.", "stem": "You’re building an executive dashboard with an Overview tab and a Deep Dive tab, each using different datasets and visual widgets.", "question": "Which capability enables this layout most directly?", "options": {"A": "Multi-tabs/pages in AI/BI Dashboards", "B": "Delta Live Tables pipelines", "C": "Unity Catalog volumes", "D": "Auto Loader triggers"}, "correct": ["A"], "multi": false, "multiStep": false, "explanation": "AI/BI Dashboards support multi-page layouts with multiple datasets and widget types."}, {"id": 32, "section": "6. Dashboards & Visualizations", "objective": "Work with parameters in SQL queries and dashboards.", "stem": "A dashboard parameter named p_region should filter a query. You want it optional: if blank, return all regions.", "question": "Which actions can you use to share a dashboard with different audiences? (Select all that apply.)", "options": {"A": "Grant dashboard access to workspace users/groups via the UI", "B": "Generate a shareable link for external users (if enabled by org settings)", "C": "Embed the dashboard in an external application (if supported/allowed)", "D": "Move the dashboard JSON into DBFS to grant access", "E": "Disable Unity Catalog so anyone can see it"}, "correct": ["A", "B", "C"], "multi": true, "multiStep": false, "explanation": "Dashboards can be shared via permissions to users/groups, shareable links (if allowed), and embedding. DBFS is not an access-control mechanism; disabling UC is not appropriate."}, {"id": 33, "section": "6. Dashboards & Visualizations", "objective": "Configure permissions to share dashboards with workspace users/groups, external users via shareable links, and embed in external apps.", "stem": "A partner outside your workspace needs read-only access to a dashboard via a link, without being added as a workspace user.", "question": "Which sharing method aligns best?", "options": {"A": "Grant them CAN MANAGE on the dashboard.", "B": "Use a shareable link configured for external access (if allowed by your workspace settings).", "C": "Copy/paste the SQL results into an email daily.", "D": "Move the dashboard to DBFS."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "AI/BI Dashboards can be shared via links (subject to org policies) and embedded for external consumption."}, {"id": 34, "section": "6. Dashboards & Visualizations", "objective": "Schedule an automatic dashboard refresh.", "stem": "A dashboard should refresh at 6:00 AM daily so execs always see up-to-date metrics.", "question": "Where do you configure this?", "options": {"A": "In the SQL Warehouse size setting", "B": "In the dashboard’s schedule/refresh settings", "C": "In Unity Catalog permissions", "D": "In Auto Loader schema hints"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Dashboards support scheduled refresh configuration in their settings."}, {"id": 35, "section": "6. Dashboards & Visualizations", "objective": "Configure an alert with a threshold and destination.", "stem": "You need to alert a Slack channel when daily revenue drops below a threshold.", "question": "What do you configure?", "options": {"A": "A dashboard widget style rule only", "B": "A Databricks SQL alert with condition + destination (Slack/webhook/email depending on setup)", "C": "A cluster policy", "D": "A materialized view refresh"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Alerts are configured from SQL queries/dashboards with thresholds and notification destinations."}, {"id": 36, "section": "6. Dashboards & Visualizations", "objective": "Identify effective visualization type to communicate insights clearly.", "stem": "You want to show the relationship between two continuous variables (ad_spend vs. revenue) and spot outliers.", "question": "Which visualization is most appropriate?", "options": {"A": "Scatter plot", "B": "Pie chart", "C": "Single value", "D": "Heatmap of categories"}, "correct": ["A"], "multi": false, "multiStep": false, "explanation": "Scatter plots are best for relationships between continuous variables and outlier detection."}, {"id": 37, "section": "6. Dashboards & Visualizations", "objective": "Create visualizations in notebooks and the SQL editor.", "stem": "A notebook cell outputs a table. You want a quick chart without exporting data.", "question": "What’s the most direct method?", "options": {"A": "Write results to CSV and open in Excel.", "B": "Use the built-in visualization options on the query result output (or display() charting).", "C": "Create a Delta Live Tables pipeline.", "D": "Turn off Photon."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Notebooks and SQL editor results support built-in chart creation from query outputs."}, {"id": 38, "section": "6. Dashboards & Visualizations", "objective": "Multi-step: Use parameters + widgets correctly.", "stem": "You have a dashboard with two parameters: p_start_date and p_end_date. The query is:\nSELECT * FROM sales WHERE sale_date BETWEEN '{{p_start_date}}' AND '{{p_end_date}}';\nUsers report errors when they only pick p_start_date.\n", "question": "Which change best makes the query resilient and logically correct?", "options": {"A": "Replace BETWEEN with =", "B": "Add defaults for both parameters and validate they are not NULL/blank before running (or guard with OR conditions)", "C": "Remove parameters and hardcode dates", "D": "Cast sale_date to STRING in the WHERE clause"}, "correct": ["B"], "multi": false, "multiStep": true, "explanation": "Date-range filters should enforce both bounds (with defaults/validation) or handle missing values via guarding logic."}, {"id": 39, "section": "7. AI/BI Genie", "objective": "Describe the purpose, key features, and components of AI/BI Genie spaces.", "stem": "A product manager expects Genie to answer questions over a curated set of datasets, with governance intact.", "question": "What is the primary purpose of an AI/BI Genie space?", "options": {"A": "To replace Unity Catalog permissions with chatbot permissions", "B": "To provide a governed, curated conversational analytics experience over selected datasets and trusted assets", "C": "To run streaming ingestion jobs", "D": "To host Python-only notebooks"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Genie spaces provide conversational analytics grounded in curated datasets/trusted assets under governance controls."}, {"id": 40, "section": "7. AI/BI Genie", "objective": "Create Genie spaces by defining sample questions and domain-specific instructions.", "stem": "You’re building a Genie space for Finance. You want the model to always treat fiscal_year as starting Feb 1 and to prefer certified tables.", "question": "Where should you encode this guidance?", "options": {"A": "In cluster init scripts", "B": "In the Genie space domain-specific instructions and curated dataset selection", "C": "In VACUUM retention settings", "D": "In Photon configuration"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Domain instructions + curated datasets guide Genie behavior and grounding."}, {"id": 41, "section": "7. AI/BI Genie", "objective": "Vet queries as Trusted Assets.", "stem": "A generated SQL query is correct and approved by your team. You want Genie to reuse it reliably and reduce hallucinations.", "question": "What should you do?", "options": {"A": "Pin it as a Trusted Asset in the Genie space.", "B": "Convert it into a dashboard text widget.", "C": "Store it in DBFS.", "D": "Disable Unity Catalog."}, "correct": ["A"], "multi": false, "multiStep": false, "explanation": "Trusted Assets are vetted queries/assets Genie can reuse for consistent, approved answers."}, {"id": 42, "section": "7. AI/BI Genie", "objective": "Assign permissions via the UI and distribute Genie spaces using embedded links and external integrations.", "stem": "You need to share a Genie space with the Sales group and also embed it in an internal portal.", "question": "Which combination best matches?", "options": {"A": "Grant workspace admin and send a notebook link", "B": "Assign permissions to the Sales group in the Genie UI and use the embed/share link for the portal", "C": "Export as a CSV", "D": "Convert the space into a SQL Warehouse"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Genie supports group permissions and distribution via share/embedded links (subject to org controls)."}, {"id": 43, "section": "7. AI/BI Genie", "objective": "Optimize Genie spaces by tracking questions, response accuracy, and feedback; update instructions/trusted assets.", "stem": "Users ask similar questions but get inconsistent answers depending on phrasing. You want to stabilize responses.", "question": "Which activities typically improve Genie answer quality over time? (Select all that apply.)", "options": {"A": "Review user question logs and feedback trends", "B": "Add/refine domain instructions and sample questions for common intents", "C": "Vet and publish high-value queries as Trusted Assets", "D": "Remove all curated datasets to prevent bias", "E": "Refresh/curate metadata for the selected Unity Catalog assets"}, "correct": ["A", "B", "C", "E"], "multi": true, "multiStep": false, "explanation": "Continuous improvement relies on observing usage, refining instructions, publishing trusted assets, and keeping metadata/datasets curated."}, {"id": 44, "section": "7. AI/BI Genie", "objective": "Multi-step: Curate datasets + warehouse choice.", "stem": "A Genie space is slow and occasionally errors. You notice it uses a tiny SQL Warehouse and includes a huge raw events table that isn’t needed for most questions.\n", "question": "Which set of changes is most likely to improve both speed and answer quality?", "options": {"A": "Add more sample questions only.", "B": "Switch to an appropriately sized warehouse and curate datasets to include only the necessary certified/curated tables (hide raw tables unless needed).", "C": "Disable governance checks.", "D": "Turn off Delta Lake features."}, "correct": ["B"], "multi": false, "multiStep": true, "explanation": "Warehouse sizing affects execution; curating the dataset set improves grounding and reduces unnecessary scans."}, {"id": 45, "section": "8. Data Modeling", "objective": "Apply industry-standard data modeling techniques such as star and snowflake schemas.", "stem": "You’re modeling a sales analytics mart. Analysts frequently slice by date, store, and product; measures include revenue and units.", "question": "Which design best supports performant BI queries?", "options": {"A": "Single wide table with repeated product/store attributes", "B": "Star schema with a fact_sales table and dimension tables (dim_date, dim_store, dim_product)", "C": "One table per report", "D": "Data vault only with no business vault"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Star schemas are common for analytical workloads: a central fact with conformed dimensions for slicing/dicing."}, {"id": 46, "section": "8. Data Modeling", "objective": "Understand how industry-standard models align with the Medallion Architecture.", "stem": "You ingest raw POS data (Bronze), clean and standardize it (Silver), then build a dimensional model for BI (Gold).", "question": "Which mapping is most accurate?", "options": {"A": "Bronze = star schema; Gold = raw ingestion", "B": "Silver = dimensional model; Bronze = curated marts", "C": "Gold often contains business-ready aggregates/dimensional models (e.g., star) derived from cleaned Silver data", "D": "Medallion means you never create dimensions"}, "correct": ["C"], "multi": false, "multiStep": false, "explanation": "Gold typically holds business-ready curated datasets (including dimensional models) built from cleaned/enriched Silver data."}, {"id": 47, "section": "9. Securing Data", "objective": "Use Unity Catalog roles and sharing settings to ensure workspace objects are secure.", "stem": "A user can query a table but cannot see the underlying files in a volume, which is expected. They ask why.", "question": "Which explanation is most accurate?", "options": {"A": "Databricks SQL never supports volumes.", "B": "Unity Catalog applies permissions independently to different securable objects (tables, volumes, schemas), so access to one doesn’t imply access to another.", "C": "Photon blocks file access by design.", "D": "Delta Lake time travel disables file permissions."}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "UC has distinct securable objects with separate grants; privileges don’t automatically propagate across object types."}, {"id": 48, "section": "9. Securing Data", "objective": "Understand how the 3-level namespace works in Unity Catalog.", "stem": "A teammate tries to reference a table as schema.table and gets an error in a UC-enabled workspace.", "question": "What is the correct fully qualified naming pattern?", "options": {"A": "workspace.schema.table", "B": "catalog.schema.table", "C": "database.table", "D": "metastore.table.column"}, "correct": ["B"], "multi": false, "multiStep": false, "explanation": "Unity Catalog uses a three-level namespace: catalog.schema.table (or view/volume)."}, {"id": 49, "section": "9. Securing Data", "objective": "Apply best practices for storage and management to ensure data security, including table ownership and PII protection.", "stem": "You need to prevent analysts from accidentally exposing raw PII while still enabling aggregate reporting.", "question": "Which controls help prevent accidental PII exposure while still enabling analytics? (Select all that apply.)", "options": {"A": "Create curated views that omit or mask PII for broad access", "B": "Restrict raw PII tables to limited roles/groups (least privilege)", "C": "Copy raw PII into dashboards so it’s easier to query", "D": "Use column-level controls/masking where available and appropriate", "E": "Grant SELECT on raw PII tables to all analysts and rely on policy reminders"}, "correct": ["A", "B", "D"], "multi": true, "multiStep": false, "explanation": "Best practice is least privilege on raw PII, provide masked/curated assets for broad use, and apply column-level protections where appropriate."}, {"id": 50, "section": "9. Securing Data", "objective": "Multi-step: Secure sharing settings.", "stem": "You want to share a dataset with an external partner using Delta Sharing, but only a subset of columns (excluding PII) should be visible.\n", "question": "Which combination is most appropriate?", "options": {"A": "Share the raw table and ask them not to query PII.", "B": "Create a view that excludes/masks PII, then share that view (or a table derived from it) via Delta Sharing with appropriate grants.", "C": "Email them a screenshot of results.", "D": "Disable table ACLs temporarily."}, "correct": ["B"], "multi": false, "multiStep": true, "explanation": "Create a governed projection (view/table) that excludes PII, then share that asset with Delta Sharing under UC controls."}];
+const STATE = {
+  startedAt: null,
+  durationSec: 90*60,
+  currentIndex: 0,
+  answers: {},    // id -> array of letters selected
+  flagged: {},    // id -> true
+  submitted: false,
+  submittedAt: null
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    Object.assign(STATE, saved);
+  } catch(e) {
+    console.warn("Failed to load state", e);
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+}
+
+function resetState() {
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function answeredCount() {
+  return Object.values(STATE.answers).filter(v => Array.isArray(v) && v.length>0).length;
+}
+
+function fmtTime(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  const mm = String(Math.floor(s/60)).padStart(2,"0");
+  const ss = String(s%60).padStart(2,"0");
+  return `${mm}:${ss}`;
+}
+
+function nowMs() { return Date.now(); }
+
+function remainingSec() {
+  if (!STATE.startedAt) return STATE.durationSec;
+  const elapsed = (nowMs() - STATE.startedAt)/1000;
+  return STATE.durationSec - elapsed;
+}
+
+function updateTimer() {
+  const t = remainingSec();
+  const el = document.getElementById("timer");
+  el.textContent = "⏱ " + fmtTime(t);
+  if (t <= 0 && !STATE.submitted) {
+    // auto-submit
+    STATE.submitted = true;
+    STATE.submittedAt = nowMs();
+    saveState();
+    renderResults();
+  }
+}
+
+function renderNav() {
+  const nav = document.getElementById("qNav");
+  nav.innerHTML = "";
+  QUESTIONS.forEach((q, idx) => {
+    const b = document.createElement("div");
+    b.className = "qBtn";
+    b.textContent = String(idx+1);
+    const ans = STATE.answers[q.id];
+    if (ans && ans.length) b.classList.add("answered");
+    if (STATE.flagged[q.id]) b.classList.add("flagged");
+    if (idx === STATE.currentIndex) b.classList.add("current");
+    b.addEventListener("click", () => {
+      STATE.currentIndex = idx;
+      saveState();
+      render();
+    });
+    nav.appendChild(b);
+  });
+}
+
+function setProgress() {
+  const pill = document.getElementById("progressPill");
+  pill.textContent = `${answeredCount()} / ${QUESTIONS.length} answered`;
+}
+
+function escapeHtml(str) {
+  return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[STATE.currentIndex];
+  const main = document.getElementById("mainBody");
+  const selected = new Set(STATE.answers[q.id] || []);
+  const optionKeys = Object.keys(q.options);
+
+  const multiNote = q.multi ? `<span class="pill">Select ${q.correct.length}</span>` : "";
+  const multiStepNote = q.multiStep ? `<span class="pill" style="border-color: rgba(122,162,255,0.45);">Multi-step</span>` : "";
+
+  main.innerHTML = `
+    <div class="qMeta">
+      <div class="line">
+        <span class="k">Question ${STATE.currentIndex+1} / ${QUESTIONS.length}</span>
+        <span class="k">${escapeHtml(q.section)}</span>
+        ${multiNote}
+        ${multiStepNote}
+        ${STATE.flagged[q.id] ? '<span class="pill" style="border-color: rgba(255,204,102,0.45); color: var(--warn);">⚑ Flagged</span>' : ''}
+      </div>
+      <div class="objective"><b>Objective:</b> ${escapeHtml(q.objective)}</div>
+    </div>
+
+    <div class="stem">${escapeHtml(q.stem)}</div>
+    <div style="font-weight:750; margin-bottom:8px;">${escapeHtml(q.question)}</div>
+
+    <div class="options" id="options"></div>
+
+    <div class="btnRow">
+      <button class="btnGhost" id="clearBtn">Clear selection</button>
+      <button class="btnGhost" id="revealBtn" ${STATE.submitted ? "" : "disabled"}>Reveal explanation</button>
+    </div>
+
+    <div id="explainBox"></div>
+  `;
+
+  const optionsDiv = document.getElementById("options");
+  optionKeys.forEach(k => {
+    const isChecked = selected.has(k);
+    const inputType = q.multi ? "checkbox" : "radio";
+    const opt = document.createElement("label");
+    opt.className = "option";
+    opt.innerHTML = `
+      <div class="letter">${k}</div>
+      <div>
+        <input type="${inputType}" name="opt" value="${k}" ${isChecked ? "checked" : ""} style="transform: translateY(2px); margin-right:10px;" />
+        <span>${escapeHtml(q.options[k])}</span>
+      </div>
+    `;
+    opt.addEventListener("click", (ev) => {
+      // Let the input update first
+      setTimeout(() => {
+        const chosen = new Set(STATE.answers[q.id] || []);
+        const input = opt.querySelector("input");
+        if (q.multi) {
+          if (input.checked) {
+            chosen.add(k);
+            // enforce max selections == correct length (exam-style)
+            if (chosen.size > q.correct.length) {
+              // remove oldest selection
+              const first = chosen.values().next().value;
+              chosen.delete(first);
+            }
+          } else {
+            chosen.delete(k);
+          }
+        } else {
+          chosen.clear(); chosen.add(k);
+        }
+        STATE.answers[q.id] = Array.from(chosen);
+        saveState();
+        renderNav();
+        setProgress();
+      }, 0);
+    });
+    optionsDiv.appendChild(opt);
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    delete STATE.answers[q.id];
+    saveState();
+    render();
+  });
+
+  document.getElementById("revealBtn").addEventListener("click", () => {
+    renderExplanation(q);
+  });
+
+  if (STATE.submitted) {
+    renderExplanation(q, true);
+  }
+}
+
+function renderExplanation(q, auto=false) {
+  const box = document.getElementById("explainBox");
+  const chosen = new Set(STATE.answers[q.id] || []);
+  const correct = new Set(q.correct);
+
+  const isCorrect =
+    chosen.size === correct.size && Array.from(chosen).every(x => correct.has(x));
+
+  const correctList = q.correct.join(", ");
+  const chosenList = (STATE.answers[q.id] && STATE.answers[q.id].length) ? STATE.answers[q.id].join(", ") : "—";
+
+  box.innerHTML = `
+    <div class="explain">
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <span class="${isCorrect ? "badgeGood" : "badgeBad"}">${isCorrect ? "✅ Correct" : "❌ Incorrect"}</span>
+        <span class="k">Your answer: ${chosenList}</span>
+        <span class="k">Correct: ${correctList}</span>
+      </div>
+      <div style="margin-top:10px; color: var(--muted); line-height:1.45;">
+        ${escapeHtml(q.explanation || "No explanation provided.")}
+      </div>
+    </div>
+  `;
+}
+
+function computeResults() {
+  let correctCount = 0;
+  const bySection = {};
+
+  QUESTIONS.forEach(q => {
+    const chosen = new Set(STATE.answers[q.id] || []);
+    const correct = new Set(q.correct);
+    const ok = (chosen.size === correct.size && Array.from(chosen).every(x => correct.has(x)));
+
+    if (ok) correctCount++;
+
+    if (!bySection[q.section]) bySection[q.section] = { total: 0, correct: 0 };
+    bySection[q.section].total++;
+    if (ok) bySection[q.section].correct++;
+  });
+
+  return {
+    correctCount,
+    total: QUESTIONS.length,
+    pct: Math.round((correctCount/QUESTIONS.length)*100),
+    bySection
+  };
+}
+
+function renderResults() {
+  const res = computeResults();
+  const main = document.getElementById("mainBody");
+  const pct = res.pct;
+
+  // build table rows
+  const rows = Object.entries(res.bySection).map(([section, v]) => {
+    const spct = Math.round((v.correct / v.total) * 100);
+    return `<tr>
+      <td>${escapeHtml(section)}</td>
+      <td>${v.correct} / ${v.total}</td>
+      <td>${spct}%</td>
+    </tr>`;
+  }).join("");
+
+  main.innerHTML = `
+    <div class="scoreBox">
+      <div>
+        <div class="muted">Score</div>
+        <div class="big">${res.correctCount} / ${res.total} <span class="muted" style="font-size:18px;">(${pct}%)</span></div>
+        <div class="bar" aria-label="score bar"><div style="width:${pct}%"></div></div>
+      </div>
+
+      <div>
+        <div style="font-weight:750; margin: 12px 0 6px;">Section breakdown</div>
+        <table class="table" aria-label="section breakdown table">
+          <thead><tr><th>Section</th><th>Correct</th><th>%</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+
+      <div class="muted" style="line-height:1.5;">
+        You can now review each question. Explanations are available on every item.
+      </div>
+
+      <div class="btnRow">
+        <button class="btnGhost" id="reviewBtn">Review questions</button>
+        <button class="btnDanger" id="resetBtn2">Reset</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("reviewBtn").addEventListener("click", () => {
+    STATE.currentIndex = 0;
+    saveState();
+    render();
+  });
+  document.getElementById("resetBtn2").addEventListener("click", resetState);
+
+  renderNav();
+  setProgress();
+}
+
+function render() {
+  renderNav();
+  setProgress();
+
+  // button states
+  document.getElementById("prevBtn").disabled = STATE.currentIndex === 0;
+  document.getElementById("nextBtn").disabled = STATE.currentIndex === QUESTIONS.length - 1;
+
+  document.getElementById("flagBtn").textContent = STATE.flagged[QUESTIONS[STATE.currentIndex].id] ? "Unflag" : "Flag";
+
+  if (STATE.submitted) {
+    renderQuestion(); // still show questions (with explanation auto)
+    document.getElementById("submitBtn").disabled = true;
+  } else {
+    renderQuestion();
+    document.getElementById("submitBtn").disabled = false;
+  }
+}
+
+function init() {
+  loadState();
+  renderNav();
+  setProgress();
+
+  document.getElementById("startBtn").addEventListener("click", () => {
+    if (!STATE.startedAt) {
+      STATE.startedAt = nowMs();
+      saveState();
+    }
+    render();
+  });
+
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    STATE.currentIndex = Math.max(0, STATE.currentIndex - 1);
+    saveState();
+    render();
+  });
+
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    STATE.currentIndex = Math.min(QUESTIONS.length - 1, STATE.currentIndex + 1);
+    saveState();
+    render();
+  });
+
+  document.getElementById("flagBtn").addEventListener("click", () => {
+    const q = QUESTIONS[STATE.currentIndex];
+    STATE.flagged[q.id] = !STATE.flagged[q.id];
+    saveState();
+    renderNav();
+    render();
+  });
+
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    // simple confirm
+    const unanswered = QUESTIONS.length - answeredCount();
+    const msg = unanswered > 0
+      ? `You still have ${unanswered} unanswered question(s). Submit anyway?`
+      : "Submit your exam now?";
+    if (!confirm(msg)) return;
+    STATE.submitted = true;
+    STATE.submittedAt = nowMs();
+    saveState();
+    renderResults();
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (confirm("This will clear all saved answers for this mock exam. Continue?")) resetState();
+  });
+
+  // If already submitted, show results; else show intro or current question
+  if (STATE.submitted) {
+    renderResults();
+  } else if (STATE.startedAt) {
+    render();
+  }
+
+  // timer tick
+  updateTimer();
+  setInterval(() => {
+    updateTimer();
+  }, 250);
+}
+
+init();
+</script>
+</body>
+</html>
